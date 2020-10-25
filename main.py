@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 token = os.environ.get('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix='>' or commands.when_mentioned, intents=intents)
+client = commands.Bot(command_prefix='>', intents=intents)
 
 
 # Cog loading and unloading
