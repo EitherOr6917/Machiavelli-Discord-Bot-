@@ -82,7 +82,7 @@ class Moderator(commands.Cog):
         )
         await ctx.send(embed=github_message)
 
-    @commands.command(hidden=True)
+    @commands.command()
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
         with open('prefixes.json', 'r') as file:
