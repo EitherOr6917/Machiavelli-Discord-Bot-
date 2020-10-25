@@ -1,27 +1,53 @@
 # Created by Isaac Nelson
 
-# Basic embed template:
-# <variable_name> = discord.Embed(
-#             description=<message>,
-#             color=discord.Color.purple()
-#         )
-#         await ctx.send(embed=<variable_name>)
-
 # Import statements
 import discord
 import os
 from discord.ext import commands
 import logging
+import json
 
 # Variable declarations
 token = os.environ.get('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix='>', intents=intents)
 logging.basicConfig(level=logging.INFO)
 
 
-# Cog loading and unloading
+# Prefixes
+def get_prefix(client, message):
+    with open('prefixes.json', 'r') as file:
+        prefixes = json.load(file)
+
+    return prefixes[str(message.guild.id)]
+
+
+client = commands.Bot(command_prefix=get_prefix, intents=intents)
+
+
+# Events
+@client.event
+async def on_guild_join(guild):
+    with open('prefixes.json', 'r') as file:
+        prefixes = json.load(file)
+
+    prefixes[str(guild.id)] = '>'
+
+    with open('prefixes.json', 'w') as file:
+        json.dump(prefixes, file, indent=4)
+
+@client.event
+async def on_guild_remove(guild):
+    with open('prefixes.json', 'r') as file:
+        prefixes = json.load(file)
+
+    prefixes.pop(str(guild.id))
+
+    with open('prefixes.json', 'w') as file:
+        json.dump(prefixes, file, indent=4)
+
+
+# Commands
 @client.command(hidden=True)
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
