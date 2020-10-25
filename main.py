@@ -36,6 +36,7 @@ async def on_guild_join(guild):
     with open('prefixes.json', 'w') as file:
         json.dump(prefixes, file, indent=4)
 
+
 @client.event
 async def on_guild_remove(guild):
     with open('prefixes.json', 'r') as file:

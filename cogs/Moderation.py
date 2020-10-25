@@ -1,6 +1,7 @@
 # Import statements
 import discord
 from discord.ext import commands
+import json
 
 
 class Moderator(commands.Cog):
@@ -74,6 +75,22 @@ class Moderator(commands.Cog):
             color=discord.Color.purple()
         )
         await ctx.send(embed=github_message)
+
+    @commands.command(hidden=True)
+    async def changeprefix(self, ctx, prefix):
+        with open('prefixes.json', 'r') as file:
+            prefixes = json.load(file)
+
+        prefixes[str(ctx.guild.id)] = prefix
+
+        with open('prefixes.json', 'w') as file:
+            json.dump(prefixes, file, indent=4)
+
+        pc_message = discord.Embed(
+            description=f'Server prefix changed to \'{prefix}\'',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=pc_message)
 
 
 def setup(client):
