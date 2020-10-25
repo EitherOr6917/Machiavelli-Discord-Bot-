@@ -74,7 +74,7 @@ class FunCommands(commands.Cog):
     async def rob(self, ctx, thievee: discord.Member):
         rob_messages = ['takes life savings of', 'takes coin purse of', 'beats up and robs']
 
-        if thievee == ctx.author.nick.lower() or thievee == ctx.author:
+        if thievee == ctx.author:
             rob_self = discord.Embed(
                 description=f'{ctx.author.mention} tries to rob themself to no avail.',
                 color=discord.Color.purple()
@@ -86,6 +86,20 @@ class FunCommands(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=rob_other)
+    @commands.command()
+    async def cookie(self, ctx, cookiee: discord.Member):
+        if cookiee == ctx.author:
+            gift_self = discord.Embed(
+                description=f'{ctx.author.mention} rewards themself with a cookie.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=gift_self)
+        else:
+            gift_other = discord.Embed(
+                description=f'{ctx.author.mention} gifts {cookiee.mention} a cookie.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=gift_other)
 
 
 def setup(client):
