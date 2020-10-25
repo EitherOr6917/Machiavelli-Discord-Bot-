@@ -13,13 +13,12 @@ import os
 from discord.ext import commands
 import logging
 
-logging.basicConfig(level=logging.INFO)
-
 # Variable declarations
 token = os.environ.get('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix='>', intents=intents)
+logging.basicConfig(level=logging.INFO)
 
 
 # Cog loading and unloading
