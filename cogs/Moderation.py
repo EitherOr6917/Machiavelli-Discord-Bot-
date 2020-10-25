@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 
 
-class Maintenance(commands.Cog):
+class Moderator(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -16,7 +16,7 @@ class Maintenance(commands.Cog):
             reply_message = discord.Embed(
                 description=f'{message.author.mention} please use command >help for more information on my commands.',
                 color=discord.Color.purple()
-                )
+            )
             await message.channel.send(embed=reply_message)
 
     @commands.Cog.listener()
@@ -67,6 +67,14 @@ class Maintenance(commands.Cog):
         await messagee.send(message)
         await ctx.send(embed=dm_sent)
 
+    @commands.command()
+    async def github(self, ctx):
+        github_message = discord.Embed(
+            description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=github_message)
+
 
 def setup(client):
-    client.add_cog(Maintenance(client))
+    client.add_cog(Moderator(client))

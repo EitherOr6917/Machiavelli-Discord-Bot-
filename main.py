@@ -11,6 +11,9 @@
 import discord
 import os
 from discord.ext import commands
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # Variable declarations
 token = os.environ.get('DISCORD_TOKEN')
