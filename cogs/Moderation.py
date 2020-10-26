@@ -13,6 +13,17 @@ class Moderator(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
+        with open('tempchannels.json') as file:
+            tempchannels = list(json.load(file))
+
+        if str(message.channel.id) in tempchannels:
+            print('true')
+            message_count = 0
+            async for message in message.channel.history():
+                message_count += 1
+            if message_count > 14:
+                await message.channel.purge(limit=(message_count - 14), oldest_first=True)
+
         if self.client.user.mentioned_in(message):
             # TODO Make the bot respond to @mentions but not @everyone or @here
             # reply_message = discord.Embed(
@@ -103,7 +114,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=pc_message)
 
     @commands.command()
-    async def poll(self, ctx, *, question):
+    async def vote(self, ctx, *, question):
         await ctx.channel.purge(limit=1)
         op_msg = discord.Embed(
             description=f'{question}',
@@ -112,6 +123,22 @@ class Moderator(commands.Cog):
         message = await ctx.send(embed=op_msg)
         await message.add_reaction('❎')
         await message.add_reaction('✅')
+
+    @commands.command()
+    async def settempchannel(self, ctx, channel: discord.TextChannel):
+        with open('tempchannels.json') as file:
+            tempchannels = list(json.load(file))
+
+        tempchannels.append(str(channel.id))
+
+        with open('tempchannels.json', 'w') as file:
+            json.dump(tempchannels, file, indent=4)
+
+        suc_add = discord.Embed(
+            description=f'{ctx.author}, {channel} has successfully been added.',
+            color=discord.Color.purple()
+        )
+        await ctx.say(embed=suc_add)
 
 
 def setup(client):
