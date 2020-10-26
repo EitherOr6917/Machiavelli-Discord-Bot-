@@ -14,11 +14,13 @@ class Moderator(commands.Cog):
     async def on_message(self, message):
         # do some extra stuff here
         if self.client.user.mentioned_in(message):
-            reply_message = discord.Embed(
-                description=f'{message.author.mention} please use command >help for more information on my commands.',
-                color=discord.Color.purple()
-            )
-            await message.channel.send(embed=reply_message)
+            # TODO Make the bot respond to @mentions but not @everyone or @here
+            # reply_message = discord.Embed(
+            #     description=f'{message.author.mention} please use command >help for more information on my commands.',
+            #     color=discord.Color.purple()
+            # )
+            # await message.channel.send(embed=reply_message)
+            return
 
     @commands.Cog.listener()
     async def on_ready(self):
