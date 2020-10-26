@@ -57,6 +57,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=ping_message)
 
     @commands.command()
+    @commands.has_permissions(administrator=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 
@@ -100,6 +101,17 @@ class Moderator(commands.Cog):
             color=discord.Color.purple()
         )
         await ctx.send(embed=pc_message)
+
+    @commands.command()
+    async def poll(self, ctx, *, question):
+        await ctx.channel.purge(limit=1)
+        op_msg = discord.Embed(
+            description=f'{question}',
+            color=discord.Color.purple()
+        )
+        message = await ctx.send(embed=op_msg)
+        await message.add_reaction('❎')
+        await message.add_reaction('✅')
 
 
 def setup(client):
