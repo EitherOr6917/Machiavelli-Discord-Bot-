@@ -86,6 +86,7 @@ class FunCommands(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=rob_other)
+
     @commands.command()
     async def cookie(self, ctx, cookiee: discord.Member):
         if cookiee == ctx.author:
@@ -100,6 +101,32 @@ class FunCommands(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=gift_other)
+
+    @commands.command()
+    async def simp(self, ctx, simpee: discord.Member):
+        if simpee == ctx.author:
+            simp_message1 = discord.Embed(
+                description=f'{ctx.author.mention} simps themself. Slightly narcissistic ngl.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=simp_message1)
+        else:
+
+            simp_message2 = discord.Embed(
+                description=f'{ctx.author.mention} is a *simp* for {simpee.mention}',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=simp_message2)
+
+    @commands.command()
+    async def superior(self, ctx, superioree: discord.Member):
+        is_sup = ['is literally superior to', 'falsely believes they\'re superior to']
+
+        sup_message = discord.Embed(
+            description=f'{ctx.author.mention} {random.choice(is_sup)} {superioree.mention}',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=sup_message)
 
 
 def setup(client):
