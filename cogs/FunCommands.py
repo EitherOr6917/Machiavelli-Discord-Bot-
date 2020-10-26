@@ -128,6 +128,53 @@ class FunCommands(commands.Cog):
         )
         await ctx.send(embed=sup_message)
 
+    @commands.command()
+    async def quote(self, ctx):
+        machiavelli_quotes = [
+            '“Everyone sees what you appear to be, few experience what you really are.”\n― Niccolò Machiavelli, '
+            'The Prince',
+            '“If an injury has to be done to a man it should be so severe that his vengeance need not be feared.”\n― '
+            'Niccolo Machiavelli, The Prince',
+            '“The lion cannot protect himself from traps, and the fox cannot defend himself from wolves. One must '
+            'therefore be a fox to recognize traps, and a lion to frighten wolves.”\n― Niccolò Machiavelli, '
+            'The Prince',
+            '“The first method for estimating the intelligence of a ruler is to look at the men he has around '
+            'him.”\n― Niccolò Machiavelli, The Prince',
+            '“There is no other way to guard yourself against flattery than by making men understand that telling you '
+            'the truth will not offend you.”\n― Machiavelli Niccolo, The Prince',
+            '“Never was anything great achieved without danger.”\n― Niccolo Machiavelli',
+            '“Never attempt to win by force what can be won by deception.”\n― Niccolò Machiavelli, The Prince',
+            '“it is much safer to be feared than loved because ...love is preserved by the link of obligation which, '
+            'owing to the baseness of men, is broken at every opportunity for their advantage; but fear preserves you '
+            'by a dread of punishment which never fails.”\n― Niccolo Machiavelli, The Prince',
+            '“I\'m not interested in preserving the status quo; I want to overthrow it.”\n― Machiavelli Niccolo',
+            '“Men are driven by two principal impulses, either by love or by fear.”\n― Niccolò Machiavelli, '
+            'The Discourses',
+            '“All courses of action are risky, so prudence is not in avoiding danger (it\'s impossible), '
+            'but calculating risk and acting decisively. Make mistakes of ambition and not mistakes of sloth. Develop '
+            'the strength to do bold things, not the strength to suffer.”\n― Niccolo Machiavelli',
+            '“It is not titles that honour men, but men that honour titles.”\n― Niccolò Machiavelli',
+            '“…he who seeks to deceive will always find someone who will allow himself to be deceived.”\n― '
+            'Machiavelli Niccolo, The Prince',
+            '“The vulgar crowd always is taken by appearances, and the world consists chiefly of the vulgar.”\n― '
+            'Niccolò Machiavelli, The Prince',
+            '“He who wishes to be obeyed must know how to command”\n― Niccolò Machiavelli, The Prince',
+            '“There is nothing more important than appearing to be religious.”\n― Niccolò Machiavelli',
+            '“Whosoever desires constant success must change his conduct with the times.”\n― Niccolo Machiavelli',
+            '“Of mankind we may say in general they are fickle, hypocritical, and greedy of gain.”\n― Niccolò '
+            'Machiavelli, The Prince',
+            '“It must be remembered that there is nothing more difficult to plan, more doubtful of success, '
+            'nor more dangerous to manage than a new system. For the initiator has the enmity of all who would profit '
+            'by the preservation of the old institution and merely lukewarm defenders in those who gain by the new '
+            'ones. ”\n― Niccolò Machiavelli '
+        ]
+
+        machi_quote = discord.Embed(
+            description=random.choice(machiavelli_quotes),
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=machi_quote)
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
