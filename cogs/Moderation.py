@@ -17,11 +17,12 @@ class Moderator(commands.Cog):
             tempchannels = list(json.load(file))
 
         if str(message.channel.id) in tempchannels:
-            print('true')
             message_count = 0
-            async for message in message.channel.history():
+            for message in message.channel.history():
                 message_count += 1
-            if message_count > 14:
+            if message_count > 20:
+                message.channel.purge(limit=1000)
+            elif message_count > 4:
                 await message.channel.purge(limit=(message_count - 14), oldest_first=True)
 
         if self.client.user.mentioned_in(message):
@@ -139,6 +140,22 @@ class Moderator(commands.Cog):
             color=discord.Color.purple()
         )
         await ctx.say(embed=suc_add)
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
+        for x in range(loop_count):
+            await channel.send(message)
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
+        loop_embed = discord.Embed(
+            description=message,
+            color=discord.Color.purple()
+        )
+        for x in range(loop_count):
+            await channel.send(embed=loop_embed)
 
 
 def setup(client):
