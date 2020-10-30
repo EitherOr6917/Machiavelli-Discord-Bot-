@@ -10,11 +10,6 @@ class Moderator(commands.Cog):
         self.client = client
 
     # Events
-    @commands.Cog.listener()
-    async def on_member_join(self, ctx):
-        if ctx.guild.id == '651884895781781526':
-            await ctx.Guild.ownder.send(f'{ctx} has joined. You should give them roles.')
-
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
@@ -44,6 +39,13 @@ class Moderator(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=error_message3)
+
+        if isinstance(error, commands.UserInputError):
+            error_message4 = discord.Embed(
+                description=f'{ctx.author.mention} you passed in incorrect arguments.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=error_message4)
 
     # Commands
     @commands.command()

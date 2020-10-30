@@ -185,13 +185,28 @@ class FunCommands(commands.Cog):
         await ctx.send(embed=noball_message)
 
     @commands.command()
-    async def hasballs(self, ctx):
-        ball_message = discord.Embed(
-            description=f'{ctx.author.mention} has balls.',
+    async def hasballs(self, ctx, target: discord.Member = 'none'):
+        if target == 'none':
+            ball_message = discord.Embed(
+                description=f'{ctx.author.mention} has balls.',
+                color=discord.Color.purple()
+            )
+        else:
+            ball_message = discord.Embed(
+                description=f'{target.mention} has balls.',
+                color=discord.Color.purple()
+            )
+
+        await ctx.send(embed=ball_message)
+
+    @commands.command()
+    async def simp(self, ctx, target: discord.Member):
+        simp_message = discord.Embed(
+            description=f'{target.mention} is a simp.',
             color=discord.Color.purple()
         )
 
-        await ctx.send(embed=ball_message)
+        await ctx.send(embed=simp_message)
 
 
 def setup(client):
