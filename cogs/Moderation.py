@@ -114,22 +114,6 @@ class Moderator(commands.Cog):
         await message.add_reaction('✅')
 
     @commands.command()
-    async def settempchannel(self, ctx, channel: discord.TextChannel):
-        with open('mafiaplayerinfo.json') as file:
-            tempchannels = list(json.load(file))
-
-        tempchannels.append(str(channel.id))
-
-        with open('mafiaplayerinfo.json', 'w') as file:
-            json.dump(tempchannels, file, indent=4)
-
-        suc_add = discord.Embed(
-            description=f'{ctx.author}, {channel} has successfully been added.',
-            color=discord.Color.purple()
-        )
-        await ctx.say(embed=suc_add)
-
-    @commands.command()
     @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         for x in range(loop_count):
