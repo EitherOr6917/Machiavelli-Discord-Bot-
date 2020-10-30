@@ -10,29 +10,15 @@ class Moderator(commands.Cog):
         self.client = client
 
     # Events
+    @commands.Cog.listener()
+    async def on_member_join(self, ctx):
+        if ctx.guild.id == '651884895781781526':
+            await ctx.Guild.ownder.send(f'{ctx} has joined. You should give them roles.')
+
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
-        with open('tempchannels.json') as file:
-            tempchannels = list(json.load(file))
-
-        if str(message.channel.id) in tempchannels:
-            message_count = 0
-            for message in message.channel.history():
-                message_count += 1
-            if message_count > 20:
-                message.channel.purge(limit=1000)
-            elif message_count > 4:
-                await message.channel.purge(limit=(message_count - 14), oldest_first=True)
-
-        if self.client.user.mentioned_in(message):
-            # TODO Make the bot respond to @mentions but not @everyone or @here
-            # reply_message = discord.Embed(
-            #     description=f'{message.author.mention} please use command >help for more information on my commands.',
-            #     color=discord.Color.purple()
-            # )
-            # await message.channel.send(embed=reply_message)
-            return
+        return
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -127,12 +113,12 @@ class Moderator(commands.Cog):
 
     @commands.command()
     async def settempchannel(self, ctx, channel: discord.TextChannel):
-        with open('tempchannels.json') as file:
+        with open('mafiaplayerinfo.json') as file:
             tempchannels = list(json.load(file))
 
         tempchannels.append(str(channel.id))
 
-        with open('tempchannels.json', 'w') as file:
+        with open('mafiaplayerinfo.json', 'w') as file:
             json.dump(tempchannels, file, indent=4)
 
         suc_add = discord.Embed(

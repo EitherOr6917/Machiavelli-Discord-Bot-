@@ -175,6 +175,24 @@ class FunCommands(commands.Cog):
         )
         await ctx.send(embed=machi_quote)
 
+    @commands.command()
+    async def noballs(self, ctx, target: discord.Member):
+        noball_message = discord.Embed(
+            description=f'{target.mention} has no balls.',
+            color=discord.Color.purple()
+        )
+
+        await ctx.send(embed=noball_message)
+
+    @commands.command()
+    async def hasballs(self, ctx):
+        ball_message = discord.Embed(
+            description=f'{ctx.author.mention} has balls.',
+            color=discord.Color.purple()
+        )
+
+        await ctx.send(embed=ball_message)
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
