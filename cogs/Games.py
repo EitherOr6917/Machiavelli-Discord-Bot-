@@ -15,12 +15,11 @@ class Games(commands.Cog):
     # Commands
     @commands.command()
     async def bet(self, ctx, *, gamblees):
-        win_messages = ['is luckier.', 'wins the bet!', 'has better karma.']
         gamblers = gamblees.split()
         gambler_winner = random.choice(gamblers)
 
         gambler_message = discord.Embed(
-            description=f'{gambler_winner} {random.choice(win_messages)}',
+            description=f'{gambler_winner} wins.',
             color=discord.Color.purple()
         )
         await ctx.send(embed=gambler_message)
