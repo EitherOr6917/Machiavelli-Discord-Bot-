@@ -128,6 +128,7 @@ class Moderator(commands.Cog):
         )
         for x in range(loop_count):
             await channel.send(embed=loop_embed)
+        await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
 
 def setup(client):
