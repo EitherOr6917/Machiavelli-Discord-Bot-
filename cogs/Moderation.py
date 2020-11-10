@@ -118,6 +118,7 @@ class Moderator(commands.Cog):
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         for x in range(loop_count):
             await channel.send(message)
+        await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
     @commands.command()
     @commands.has_permissions(administrator=True)
