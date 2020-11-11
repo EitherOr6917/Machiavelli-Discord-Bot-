@@ -208,6 +208,23 @@ class FunCommands(commands.Cog):
 
         await ctx.send(embed=simp_message)
 
+    @commands.command()
+    async def f(self, ctx, *, target=''):
+        if target == '':
+            f_message = discord.Embed(
+                description=f'Press f to pay respects',
+                color=discord.Color.purple()
+            )
+        else:
+            f_message = discord.Embed(
+                description=f'Press f to pay respects to {target}',
+                color=discord.Color.purple()
+            )
+
+        message = await ctx.send(embed=f_message)
+
+        await message.add_reaction('🇫')
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
