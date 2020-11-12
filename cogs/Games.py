@@ -1,7 +1,6 @@
 # Import statements
 import random
 import discord
-import json
 from discord.ext import commands
 
 
@@ -30,6 +29,8 @@ class Games(commands.Cog):
             description=f'{ctx.author.mention} specify number of players with setplayercount',
             color=discord.Color.purple()
         )
+
+        await ctx.send(embed=players_q)
 
 
 def setup(client):
