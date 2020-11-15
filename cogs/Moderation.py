@@ -1,13 +1,22 @@
 # Import statements
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import json
+import random
+
+# variables
+statuses = ['You', 'My opponents', 'Italian royalty', 'Coup planning']
 
 
 class Moderator(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+
+    # Other
+    @tasks.loop(seconds=60)
+    async def change_status(self):
+        await self.client.change_presence(activity=discord.Game(random.choice(statuses)))
 
     # Events
     @commands.Cog.listener('on_message')
@@ -18,12 +27,14 @@ class Moderator(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'Logged in as: {self.client.user}\nDiscord version: {discord.__version__}\n')
+        self.change_status.start()
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
+        if isinstance(error, commands.UserInputError):
             error_message1 = discord.Embed(
-                description=f'{ctx.author.mention} please pass in the missing required arguments.',
+                description=f'{ctx.author.mention} please pass in correct arguments. For more information, use >help '
+                            f'\'command\'.',
                 color=discord.Color.purple()
             )
             await ctx.send(embed=error_message1)
@@ -39,13 +50,6 @@ class Moderator(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=error_message3)
-
-        if isinstance(error, commands.UserInputError):
-            error_message4 = discord.Embed(
-                description=f'{ctx.author.mention} you passed in incorrect arguments.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=error_message4)
 
     # Commands
     @commands.command()

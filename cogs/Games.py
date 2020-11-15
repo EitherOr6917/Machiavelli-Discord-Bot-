@@ -12,7 +12,7 @@ class Games(commands.Cog):
     # Events
 
     # Commands
-    @commands.command()
+    @commands.command(help='Decides which of the given options wins')
     async def bet(self, ctx, *, gamblees):
         gamblers = gamblees.split()
         gambler_winner = random.choice(gamblers)
@@ -23,7 +23,7 @@ class Games(commands.Cog):
         )
         await ctx.send(embed=gambler_message)
 
-    @commands.command()
+    @commands.command(help='Currently non functional command')
     async def startgame(self, ctx):
         players_q = discord.Embed(
             description=f'{ctx.author.mention} specify number of players with setplayercount',
