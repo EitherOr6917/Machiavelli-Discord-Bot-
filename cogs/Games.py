@@ -18,8 +18,13 @@ def increase_virtu(ctx, amount):
     with open('virtuRecord.json', 'r') as file:
         virtu_levels = json.load(file)
 
-    if ctx.author.id not in virtu_levels:
+    if str(ctx.author.id) in virtu_levels:
         virtu_levels[str(ctx.author.id)] += amount
+    else:
+        virtu_levels[str(ctx.author.id)] = 0
+
+        with open('virtuRecord.json', 'w') as file:
+            json.dump(virtu_levels, file, indent=4)
 
     with open('virtuRecord.json', 'w') as file:
         json.dump(virtu_levels, file, indent=4)
@@ -58,25 +63,45 @@ class Games(commands.Cog):
         await ctx.send(embed=players_q)
 
     @commands.command(help='Shows user\'s amount of virtù')
-    async def virtu(self, ctx):
-        with open('virtuRecord.json', 'r') as file:
-            virtu_levels = json.load(file)
+    async def virtu(self, ctx, target: discord.Member = ''):
+        if target == '':
+            with open('virtuRecord.json', 'r') as file:
+                virtu_levels = json.load(file)
 
-        if str(ctx.author.id) not in virtu_levels:
-            virtu_levels[str(ctx.author.id)] = 0
+            if str(ctx.author.id) not in virtu_levels:
+                virtu_levels[str(ctx.author.id)] = 0
 
-            with open('virtuRecord.json', 'w') as file:
-                json.dump(virtu_levels, file, indent=4)
+                with open('virtuRecord.json', 'w') as file:
+                    json.dump(virtu_levels, file, indent=4)
 
-        with open('virtuRecord.json', 'r') as file:
-            virtu_levels = json.load(file)
+            with open('virtuRecord.json', 'r') as file:
+                virtu_levels = json.load(file)
 
-            virtu_msg = discord.Embed(
-                description=f'{ctx.author.mention}, your virtù is {virtu_levels[str(ctx.author.id)]}',
-                color=discord.Color.purple()
-            )
+                virtu_msg = discord.Embed(
+                    description=f'{ctx.author.mention}, your virtù is {virtu_levels[str(ctx.author.id)]}',
+                    color=discord.Color.purple()
+                )
 
-            await ctx.send(embed=virtu_msg)
+                await ctx.send(embed=virtu_msg)
+        else:
+            with open('virtuRecord.json', 'r') as file:
+                virtu_levels = json.load(file)
+
+            if str(target.id) not in virtu_levels:
+                virtu_levels[str(target.id)] = 0
+
+                with open('virtuRecord.json', 'w') as file:
+                    json.dump(virtu_levels, file, indent=4)
+
+            with open('virtuRecord.json', 'r') as file:
+                virtu_levels = json.load(file)
+
+                virtu_msg = discord.Embed(
+                    description=f'{ctx.author.mention}, {target.mention}\'s virtù is {virtu_levels[str(target.id)]}',
+                    color=discord.Color.purple()
+                )
+
+                await ctx.send(embed=virtu_msg)
 
 
 def setup(client):
