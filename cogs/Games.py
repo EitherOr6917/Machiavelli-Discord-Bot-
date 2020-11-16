@@ -3,7 +3,6 @@ import random
 import discord
 import json
 from discord.ext import commands
-from ..virtu import increase_virtu
 
 
 # Prefixes
@@ -12,6 +11,18 @@ def get_prefix(ctx):
         prefixes = json.load(file)
 
     return prefixes[str(ctx.guild.id)]
+
+
+# Virtu
+def increase_virtu(ctx, amount):
+    with open('virtuRecord.json', 'r') as file:
+        virtu_levels = json.load(file)
+
+    if ctx.author.id not in virtu_levels:
+        virtu_levels[str(ctx.author.id)] += amount
+
+    with open('virtuRecord.json', 'w') as file:
+        json.dump(virtu_levels, file, indent=4)
 
 
 class Games(commands.Cog):
@@ -48,16 +59,16 @@ class Games(commands.Cog):
 
     @commands.command(help='Shows user\'s amount of virtù')
     async def virtu(self, ctx):
-        with open('virtu.json', 'r') as file:
+        with open('virtuRecord.json', 'r') as file:
             virtu_levels = json.load(file)
 
         if str(ctx.author.id) not in virtu_levels:
             virtu_levels[str(ctx.author.id)] = 0
 
-            with open('virtu.json', 'w') as file:
+            with open('virtuRecord.json', 'w') as file:
                 json.dump(virtu_levels, file, indent=4)
 
-        with open('virtu.json', 'r') as file:
+        with open('virtuRecord.json', 'r') as file:
             virtu_levels = json.load(file)
 
             virtu_msg = discord.Embed(
