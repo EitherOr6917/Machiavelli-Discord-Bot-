@@ -52,7 +52,7 @@ class Moderator(commands.Cog):
             await ctx.send(embed=error_message3)
 
     # Commands
-    @commands.command()
+    @commands.command(help='Returns the bot\'s ping')
     async def ping(self, ctx):
         ping_message = discord.Embed(
             description=f'Latency: {"{:.1f}".format(self.client.latency * 1000)}ms.',
@@ -60,7 +60,7 @@ class Moderator(commands.Cog):
         )
         await ctx.send(embed=ping_message)
 
-    @commands.command()
+    @commands.command(help='Clears the specified number of messages (defaults to 5)')
     @commands.has_permissions(administrator=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
@@ -71,7 +71,7 @@ class Moderator(commands.Cog):
         )
         await ctx.send(embed=cleared_message)
 
-    @commands.command(aliases=['dm'])
+    @commands.command(aliases=['dm'], help='dm\'s the specified user with the specified message')
     @commands.has_permissions(administrator=True)
     async def direct_message(self, ctx, messagee: discord.Member, *, message):
         dm_sent = discord.Embed(
@@ -81,7 +81,7 @@ class Moderator(commands.Cog):
         await messagee.send(message)
         await ctx.send(embed=dm_sent)
 
-    @commands.command()
+    @commands.command(help='Gives link to source code on github')
     async def github(self, ctx):
         github_message = discord.Embed(
             description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
@@ -89,7 +89,7 @@ class Moderator(commands.Cog):
         )
         await ctx.send(embed=github_message)
 
-    @commands.command()
+    @commands.command(help='Changes the prefix for the bot on the server')
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
         with open('prefixes.json', 'r') as file:
@@ -106,7 +106,7 @@ class Moderator(commands.Cog):
         )
         await ctx.send(embed=pc_message)
 
-    @commands.command()
+    @commands.command(help='Gives a votable message with the content provided')
     async def vote(self, ctx, *, question):
         await ctx.channel.purge(limit=1)
         op_msg = discord.Embed(
@@ -117,14 +117,14 @@ class Moderator(commands.Cog):
         await message.add_reaction('❎')
         await message.add_reaction('✅')
 
-    @commands.command()
+    @commands.command(help='Spams the text provided in the channel provided the given number of times')
     @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         for x in range(loop_count):
             await channel.send(message)
         await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
-    @commands.command()
+    @commands.command(help='Same as looptext, except it sends an embed instead of plaintext')
     @commands.has_permissions(administrator=True)
     async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         loop_embed = discord.Embed(
