@@ -96,9 +96,11 @@ class Games(commands.Cog):
             with open('virtuRecord.json', 'r') as file:
                 virtu_levels = json.load(file)
 
+                vlevel = virtu_levels[str(target.id)]
+
                 virtu_msg = discord.Embed(
-                    description=f'{ctx.author.mention}, {target.mention}\'s virtù is {virtu_levels[str(target.id)]}',
-                    color=discord.Color.purple()
+                    title=f'{target.nick}\'s Virtù',
+                    description=f'Level: {int(vlevel / 100)}\nVirtù: {vlevel}'
                 )
 
                 await ctx.send(embed=virtu_msg)
