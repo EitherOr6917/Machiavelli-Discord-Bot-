@@ -225,6 +225,17 @@ class FunCommands(commands.Cog):
 
         await message.add_reaction('🇫')
 
+    @commands.command(help='Decides which of the given options wins')
+    async def bet(self, ctx, *, gamblees):
+        gamblers = gamblees.split()
+        gambler_winner = random.choice(gamblers)
+
+        gambler_message = discord.Embed(
+            description=f'{gambler_winner} wins.',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=gambler_message)
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
