@@ -1,8 +1,9 @@
 # Import statements
 import random
 import discord
-from discord.ext import commands
 import json
+from discord.ext import commands
+from ..virtu import increase_virtu
 
 
 # Prefixes
@@ -21,17 +22,10 @@ class Games(commands.Cog):
     # Events
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
-        if message.content.startswith(get_prefix(message)):
-            with open('virtu.json', 'r') as file:
-                virtu_levels = json.load(file)
-
-            if message.author.id not in virtu_levels:
-                virtu_levels[str(message.author.id)] += 1
-
-            with open('virtu.json', 'w') as file:
-                json.dump(virtu_levels, file, indent=4)
+        increase_virtu(message, 1)
 
     # Commands
+
     @commands.command(help='Decides which of the given options wins')
     async def bet(self, ctx, *, gamblees):
         gamblers = gamblees.split()
@@ -57,7 +51,7 @@ class Games(commands.Cog):
         with open('virtu.json', 'r') as file:
             virtu_levels = json.load(file)
 
-        if ctx.author.id not in virtu_levels:
+        if str(ctx.author.id) not in virtu_levels:
             virtu_levels[str(ctx.author.id)] = 0
 
             with open('virtu.json', 'w') as file:
