@@ -22,6 +22,13 @@ class Moderator(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
+        if message.content.lower() == 'hello':
+            hello_msg = discord.Embed(
+                description=f'Hello {message.author.mention}!',
+                color=discord.Color.purple()
+            )
+
+            await message.channel.send(embed=hello_msg)
         return
 
     @commands.Cog.listener()

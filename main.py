@@ -71,6 +71,40 @@ async def unload(ctx, extension):
     await ctx.send(embed=unload_message)
 
 
+@client.command(hidden='true', help='Makes bot unusable')
+async def deactivate(ctx):
+    if ctx.author.id == 406663932166668288:
+        goodbye_msg = discord.Embed(
+            description=f'Goodbye for now.',
+            color=discord.Color.dark_gray()
+        )
+
+        for fn in os.listdir('./cogs'):
+            if fn.endswith('.py'):
+                client.unload_extension(f'cogs.{fn[:-3]}')
+
+        await ctx.send(embed=goodbye_msg)
+    else:
+        await ctx.send(f'{ctx.author.mention} you may not use this command.')
+
+
+@client.command(hidden='true', help='Makes bot usable')
+async def activate(ctx):
+    if ctx.author.id == 406663932166668288:
+        imback_msg = discord.Embed(
+            description=f'I\'m back!',
+            color=discord.Color.dark_gray()
+        )
+
+        for fn in os.listdir('./cogs'):
+            if fn.endswith('.py'):
+                client.load_extension(f'cogs.{fn[:-3]}')
+
+        await ctx.send(embed=imback_msg)
+    else:
+        await ctx.send(f'{ctx.author.mention} you may not use this command.')
+
+
 # Running the client
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
