@@ -21,7 +21,7 @@ def increase_virtu(ctx, amount):
     if str(ctx.author.id) in virtu_levels:
         virtu_levels[str(ctx.author.id)] += amount
     else:
-        virtu_levels[str(ctx.author.id)] = 0
+        virtu_levels[str(ctx.author.id)] = 1
 
         with open('virtuRecord.json', 'w') as file:
             json.dump(virtu_levels, file, indent=4)
@@ -69,7 +69,7 @@ class Games(commands.Cog):
                 virtu_levels = json.load(file)
 
             if str(ctx.author.id) not in virtu_levels:
-                virtu_levels[str(ctx.author.id)] = 0
+                virtu_levels[str(ctx.author.id)] = 1
 
                 with open('virtuRecord.json', 'w') as file:
                     json.dump(virtu_levels, file, indent=4)

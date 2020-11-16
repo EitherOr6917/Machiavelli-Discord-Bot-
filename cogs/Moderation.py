@@ -142,6 +142,15 @@ class Moderator(commands.Cog):
             await channel.send(embed=loop_embed)
         await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
+    @commands.command(help='Returns the discord ID of the targeted user')
+    async def checkid(self, ctx, target: discord.Member):
+        id_msg = discord.Embed(
+            description=f'{target.nick}\'s discord id is {target.id}',
+            color=discord.Color.purple()
+        )
+
+        await ctx.send(embed=id_msg)
+
 
 def setup(client):
     client.add_cog(Moderator(client))
