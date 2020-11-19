@@ -70,23 +70,6 @@ class FunCommands(commands.Cog):
             )
             await ctx.send(embed=unhidden_message)
 
-    @commands.command(help='You rob whoever you specify')
-    async def rob(self, ctx, thievee: discord.Member):
-        rob_messages = ['takes life savings of', 'takes coin purse of', 'beats up and robs']
-
-        if thievee == ctx.author:
-            rob_self = discord.Embed(
-                description=f'{ctx.author.mention} tries to rob themself to no avail.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(rob_self)
-        else:
-            rob_other = discord.Embed(
-                description=f'{ctx.author.mention} {random.choice(rob_messages)} {thievee.mention}.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=rob_other)
-
     @commands.command(help='Gives another user or yourself a cookie')
     async def cookie(self, ctx, cookiee: discord.Member):
         if cookiee == ctx.author:
@@ -200,7 +183,7 @@ class FunCommands(commands.Cog):
         await ctx.send(embed=ball_message)
 
     @commands.command(help='Specified user is a simp')
-    async def simp(self, ctx, target: discord.Member):
+    async def issimp(self, ctx, target: discord.Member):
         simp_message = discord.Embed(
             description=f'{target.mention} is a simp.',
             color=discord.Color.purple()

