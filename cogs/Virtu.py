@@ -5,17 +5,16 @@ from discord.ext import commands
 import random
 
 
-# Prefixes
+# Sync defnitions
 def get_prefix(ctx):
-    with open('prefixes.json', 'r') as file:
+    with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
     return prefixes[str(ctx.guild.id)]
 
 
-# Virtu
 def change_virtu(ctx, amount):
-    with open('virtuRecord.json', 'r') as file:
+    with open('jsons/virtuRecord.json', 'r') as file:
         virtu_levels = json.load(file)
 
     if str(ctx) in virtu_levels:
@@ -26,13 +25,13 @@ def change_virtu(ctx, amount):
         else:
             print('ERROR: Don\'t chance virtu by 0. That is dumb.')
 
-        with open('virtuRecord.json', 'w') as file:
+        with open('jsons/virtuRecord.json', 'w') as file:
             json.dump(virtu_levels, file, indent=4)
 
     else:
         virtu_levels[str(ctx)] = 1
 
-        with open('virtuRecord.json', 'w') as file:
+        with open('jsons/virtuRecord.json', 'w') as file:
             json.dump(virtu_levels, file, indent=4)
 
 
@@ -45,7 +44,7 @@ def easy_embed(ctx, message):
 
 
 def check_virtu(userid):
-    with open('virtuRecord.json', 'r') as file:
+    with open('jsons/virtuRecord.json', 'r') as file:
         virtu_levels = json.load(file)
         vlevel = virtu_levels[str(userid)]
     return vlevel
@@ -61,6 +60,8 @@ class Virtu(commands.Cog):
     async def on_message(self, message):
         if message.author != self.client.user:
             change_virtu(message.author.id, 1)
+            if message.content.startswith(get_prefix(message)):
+                change_virtu(message.author.id, 4)
 
     # Commands
     @commands.command(help='Shows user\'s amount of virtù')
@@ -70,16 +71,16 @@ class Virtu(commands.Cog):
         if citizen == '':
             citizen = ctx.author
 
-        with open('virtuRecord.json', 'r') as file:
+        with open('jsons/virtuRecord.json', 'r') as file:
             virtu_levels = json.load(file)
 
         if str(citizen.id) not in virtu_levels:
             virtu_levels[str(citizen.id)] = 0
 
-            with open('virtuRecord.json', 'w') as file:
+            with open('jsons/virtuRecord.json', 'w') as file:
                 json.dump(virtu_levels, file, indent=4)
 
-        with open('virtuRecord.json', 'r') as file:
+        with open('jsons/virtuRecord.json', 'r') as file:
             virtu_levels = json.load(file)
             vlevel = virtu_levels[str(citizen.id)]
 
@@ -99,7 +100,7 @@ class Virtu(commands.Cog):
         random.seed()
         robber_savings = check_virtu(ctx.author.id)
         target_savings = check_virtu(target.id)
-        if robber_savings >= (2*amount) and target_savings >= amount:
+        if robber_savings >= (2 * amount) and target_savings >= amount:
             result = random.randint(0, 2)
             if result == 0:
                 change_virtu(ctx.author.id, (-2 * amount))
@@ -121,7 +122,7 @@ class Virtu(commands.Cog):
     @commands.guild_only()
     async def give(self, ctx, target: discord.Member, amount: int):
         if check_virtu(ctx.author.id) >= amount:
-            change_virtu(ctx.author.id, -1*amount)
+            change_virtu(ctx.author.id, -1 * amount)
             change_virtu(target.id, amount)
 
             gift_msg = discord.Embed(

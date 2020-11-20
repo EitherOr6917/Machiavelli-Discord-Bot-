@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Prefixes
 def get_prefix(client, message):
-    with open('prefixes.json', 'r') as file:
+    with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
     return prefixes[str(message.guild.id)]
@@ -28,23 +28,23 @@ client = commands.Bot(command_prefix=get_prefix, intents=intents)
 # Events
 @client.event
 async def on_guild_join(guild):
-    with open('prefixes.json', 'r') as file:
+    with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
     prefixes[str(guild.id)] = '>'
 
-    with open('prefixes.json', 'w') as file:
+    with open('jsons/prefixes.json', 'w') as file:
         json.dump(prefixes, file, indent=4)
 
 
 @client.event
 async def on_guild_remove(guild):
-    with open('prefixes.json', 'r') as file:
+    with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
     prefixes.pop(str(guild.id))
 
-    with open('prefixes.json', 'w') as file:
+    with open('jsons/prefixes.json', 'w') as file:
         json.dump(prefixes, file, indent=4)
 
 

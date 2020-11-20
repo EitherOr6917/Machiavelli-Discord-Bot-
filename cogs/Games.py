@@ -15,15 +15,15 @@ class Games(commands.Cog):
     @commands.command(help='Initiates game')
     @commands.guild_only()
     async def initiate(self, ctx, target: discord.Member):
-        with open('duel.json', 'r') as file:
+        with open('jsons/duel.json', 'r') as file:
             duel_list = json.load(file)
-        if not duel_list:
+        if not bool(duel_list):
             duel_list['Player 1'] = str(target.id)
             duel_list['Player 2'] = str(ctx.author.id)
             duel_list['Player 1 HP'] = 10
             duel_list['Player 2 HP'] = 10
 
-            with open('duel.json', 'w') as file:
+            with open('jsons/duel.json', 'w') as file:
                 json.dump(duel_list, file, indent=4)
 
             game_created = discord.Embed(
@@ -33,7 +33,7 @@ class Games(commands.Cog):
             await ctx.send(embed=game_created)
         else:
             game_in_progress = discord.Embed(
-                description=f'{ctx.author.mention} there is a game in progress. Use {self.client.cmmand_prefix}'
+                description=f'{ctx.author.mention} there is a game in progress. Use '
                             'clearduel to cancel the current game',
                 color=discord.Color.purple()
             )
@@ -41,11 +41,13 @@ class Games(commands.Cog):
 
     @commands.command(help='Clears lobby for a duel.')
     @commands.guild_only()
-    async def cancelduel(self, ctx):
-        with open('duel.json', 'r') as file:
+    async def cancel_duel(self, ctx):
+        with open('jsons/duel.json', 'r') as file:
             duel_list = json.load(file)
-        if duel_list:
-            with open('duel.json', 'w') as file:
+        if bool(duel_list):
+            duel_list = {}
+
+            with open('jsons/duel.json', 'w') as file:
                 json.dump(duel_list, file, indent=4)
 
             canceled_msg = discord.Embed(
@@ -55,11 +57,39 @@ class Games(commands.Cog):
             await ctx.send(embed=canceled_msg)
         else:
             no_game_in_progress = discord.Embed(
-                description=f'{ctx.author.mention} there is no game to cancel. Use {self.client.cmmand_prefix}'
+                description=f'{ctx.author.mention} there is no game to cancel. Use '
                             'initiate to start a new game',
                 color=discord.Color.purple()
             )
             await ctx.send(embed=no_game_in_progress)
+
+    @commands.command(help='Queues an attack')
+    @commands.guild_only()
+    async def duel_attack(self, ctx):
+        with open('jsons/duel.json', 'r') as file:
+            duel_list = json.load(file)
+        if bool(duel_list) and ((duel_list['Player 1'] == str(ctx.author.id)) or (duel_list['Player 2'] ==
+                                                                                  str(ctx.author.id))):
+            keys = list(duel_list.keys())
+            values = list(duel_list.values())
+            player = keys[values.index(str(ctx.author.id))]
+
+            duel_list[f'{player} Action'] = 'attack'
+
+            with open('jsons/duel.json', 'w') as file:
+                json.dump(duel_list, file, indent=4)
+
+            game_created = discord.Embed(
+                description=f'{ctx.author.mention}, your attack has been queued.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=game_created)
+        else:
+            game_in_progress = discord.Embed(
+                description=f'{ctx.author.mention} you are not in a game at the moment',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=game_in_progress)
 
 
 def setup(client):
