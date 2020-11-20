@@ -20,19 +20,20 @@ def change_virtu(ctx, amount):
 
     if str(ctx) in virtu_levels:
         if amount < 0:
-            virtu_levels[str(ctx)] -= amount
+            virtu_levels[str(ctx)] -= abs(amount)
         elif amount > 0:
             virtu_levels[str(ctx)] += amount
         else:
             print('ERROR: Don\'t chance virtu by 0. That is dumb.')
+
+        with open('virtuRecord.json', 'w') as file:
+            json.dump(virtu_levels, file, indent=4)
+
     else:
         virtu_levels[str(ctx)] = 1
 
         with open('virtuRecord.json', 'w') as file:
             json.dump(virtu_levels, file, indent=4)
-
-    with open('virtuRecord.json', 'w') as file:
-        json.dump(virtu_levels, file, indent=4)
 
 
 def easy_embed(ctx, message):
@@ -63,6 +64,7 @@ class Virtu(commands.Cog):
 
     # Commands
     @commands.command(help='Shows user\'s amount of virtù')
+    @commands.guild_only()
     async def virtu(self, ctx, target: discord.Member = ''):
         citizen = target
         if citizen == '':
@@ -92,6 +94,7 @@ class Virtu(commands.Cog):
             await ctx.send(file=file, embed=virtu_msg)
 
     @commands.command(help='Attempts to take virtu from the target')
+    @commands.guild_only()
     async def rob(self, ctx, target: discord.Member, amount: int):
         random.seed()
         robber_savings = check_virtu(ctx.author.id)
@@ -108,11 +111,48 @@ class Virtu(commands.Cog):
                 await ctx.send(embed=easy_embed(ctx, 'successfully pulled off the robbery.'))
         else:
             fail_message = discord.Embed(
-                description=f'{ctx.author.mention} you don\'t have enough virtù to do this',
+                description=f'{ctx.author.mention} you or the target do not have enough virtù to do this',
                 color=discord.Color.purple()
             )
 
             await ctx.send(embed=fail_message)
+
+    @commands.command(help='Give another member some of your virtù')
+    @commands.guild_only()
+    async def give(self, ctx, target: discord.Member, amount: int):
+        if check_virtu(ctx.author.id) >= amount:
+            change_virtu(ctx.author.id, -1*amount)
+            change_virtu(target.id, amount)
+
+            gift_msg = discord.Embed(
+                description=f'{ctx.author.mention} you gave {target.mention} {amount} virtù',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=gift_msg)
+        else:
+            no_gift_msg = discord.Embed(
+                description=f'{ctx.author.mention} you do not have enough virtù to do this.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=no_gift_msg)
+
+    @commands.command(hidden=True, help='Creates Virtù which is given to user')
+    @commands.guild_only()
+    async def sgive(self, ctx, target: discord.Member, amount: int):
+        if ctx.author.id == 406663932166668288:
+            change_virtu(target.id, amount)
+
+            gift_msg = discord.Embed(
+                description=f'{target.mention} now has {amount} more virtù',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=gift_msg)
+        else:
+            no_gift_msg = discord.Embed(
+                description=f'{ctx.author.mention} you cannot do this.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=no_gift_msg)
 
 
 def setup(client):

