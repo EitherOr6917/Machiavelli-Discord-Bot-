@@ -59,13 +59,12 @@ class Virtu(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         if message.author != self.client.user:
-            change_virtu(message.author.id, 1)
-            if message.content.startswith(get_prefix(message)):
-                change_virtu(message.author.id, 4)
+            change_virtu(message.author.id, (int(check_virtu(message.author.id)/250)+1))
 
     # Commands
     @commands.command(help='Shows user\'s amount of virtù')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def virtu(self, ctx, target: discord.Member = ''):
         citizen = target
         if citizen == '':
@@ -86,7 +85,7 @@ class Virtu(commands.Cog):
 
             file = discord.File('./images/vLogo.png', filename='vimage.png')
             virtu_msg = discord.Embed(
-                title=f'{citizen.nick}\'s Virtù',
+                title=f'{citizen.display_name}\'s Virtù',
                 description=f'Virtù Level: {int(vlevel / 100)}\nVirtù total: {vlevel}',
                 color=discord.Color.purple()
             )
@@ -96,6 +95,7 @@ class Virtu(commands.Cog):
 
     @commands.command(help='Attempts to take virtu from the target')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def rob(self, ctx, target: discord.Member, amount: int):
         random.seed()
         robber_savings = check_virtu(ctx.author.id)
@@ -120,6 +120,7 @@ class Virtu(commands.Cog):
 
     @commands.command(help='Give another member some of your virtù')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def give(self, ctx, target: discord.Member, amount: int):
         if check_virtu(ctx.author.id) >= amount:
             change_virtu(ctx.author.id, -1 * amount)
@@ -139,6 +140,7 @@ class Virtu(commands.Cog):
 
     @commands.command(hidden=True, help='Creates Virtù which is given to user')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def sgive(self, ctx, target: discord.Member, amount: int):
         if ctx.author.id == 406663932166668288:
             change_virtu(target.id, amount)

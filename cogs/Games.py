@@ -14,6 +14,7 @@ class Games(commands.Cog):
     # Commands
     @commands.command(help='Initiates game')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def initiate(self, ctx, target: discord.Member):
         with open('jsons/duel.json', 'r') as file:
             duel_list = json.load(file)
@@ -41,6 +42,7 @@ class Games(commands.Cog):
 
     @commands.command(help='Clears lobby for a duel.')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def cancel_duel(self, ctx):
         with open('jsons/duel.json', 'r') as file:
             duel_list = json.load(file)
@@ -65,6 +67,7 @@ class Games(commands.Cog):
 
     @commands.command(help='Queues an attack')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def duel_attack(self, ctx):
         with open('jsons/duel.json', 'r') as file:
             duel_list = json.load(file)

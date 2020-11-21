@@ -51,24 +51,26 @@ async def on_guild_remove(guild):
 # Commands
 @client.command(hidden=True)
 async def load(ctx, extension):
-    client.load_extension(f'cogs.{extension}')
+    if ctx.author.id == 406663932166668288:
+        client.load_extension(f'cogs.{extension}')
 
-    load_message = discord.Embed(
-        description=f'Loaded {extension}',
-        color=discord.Color.purple()
-    )
-    await ctx.send(embed=load_message)
+        load_message = discord.Embed(
+            description=f'Loaded {extension}',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=load_message)
 
 
 @client.command(hidden=True)
 async def unload(ctx, extension):
-    client.unload_extension(f'cogs.{extension}')
+    if ctx.author.id == 406663932166668288:
+        client.unload_extension(f'cogs.{extension}')
 
-    unload_message = discord.Embed(
-        description=f'Unloaded {extension}',
-        color=discord.Color.purple()
-    )
-    await ctx.send(embed=unload_message)
+        unload_message = discord.Embed(
+            description=f'Unloaded {extension}',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=unload_message)
 
 
 @client.command(hidden='true', help='Makes bot unusable')

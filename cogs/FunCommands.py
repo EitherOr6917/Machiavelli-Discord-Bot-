@@ -14,6 +14,7 @@ class FunCommands(commands.Cog):
     # Commands
     @commands.command(help='You kill either another person or yourself')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def kill(self, ctx, target: discord.Member):
         self_kill_messages = ['decided to off themselves.', 'decided the donuts weren\'t good enough.',
                               'wants to try making toast in a bath',
@@ -35,6 +36,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Says a member is mean')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def mean(self, ctx, meanee: discord.Member):
 
         if meanee == ctx.author:
@@ -54,6 +56,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Says what you want it to, add "-hide" to hide your message')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def say(self, ctx, *, speechbubble):
         if speechbubble.endswith('-hide'):
 
@@ -75,6 +78,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Gives another user or yourself a cookie')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def cookie(self, ctx, cookiee: discord.Member):
         if cookiee == ctx.author:
             gift_self = discord.Embed(
@@ -91,6 +95,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='You simp the specified user (can be yourself)')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def simp(self, ctx, simpee: discord.Member):
         if simpee == ctx.author:
             simp_message1 = discord.Embed(
@@ -108,6 +113,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Decides whether you or the specifed user are superior')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def superior(self, ctx, superioree: discord.Member):
         is_sup = ['is literally superior to', 'falsely believes they\'re superior to']
 
@@ -119,6 +125,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Quotes Niccolo Machiavelli')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def quote(self, ctx):
         machiavelli_quotes = [
             '“Everyone sees what you appear to be, few experience what you really are.”\n― Niccolò Machiavelli, '
@@ -167,6 +174,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Says that the specified user has no balls')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def noballs(self, ctx, target: discord.Member):
         noball_message = discord.Embed(
             description=f'{target.mention} has no balls.',
@@ -177,6 +185,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Says that the specified user has balls')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def hasballs(self, ctx, target: discord.Member = 'none'):
         if target == 'none':
             ball_message = discord.Embed(
@@ -193,6 +202,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Specified user is a simp')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def issimp(self, ctx, target: discord.Member):
         simp_message = discord.Embed(
             description=f'{target.mention} is a simp.',
@@ -203,6 +213,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Press F to pay respects (target optional)')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def f(self, ctx, *, target=''):
         if target == '':
             f_message = discord.Embed(
@@ -221,6 +232,7 @@ class FunCommands(commands.Cog):
 
     @commands.command(help='Decides which of the given options wins')
     @commands.guild_only()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def bet(self, ctx, *, gamblees):
         gamblers = gamblees.split()
         gambler_winner = random.choice(gamblers)
