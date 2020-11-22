@@ -13,7 +13,7 @@ class Cute(commands.Cog):
     # Commands
     @commands.command(help='Says that a member likes another member')
     @commands.guild_only()
-    @commands.cooldown(1, 2, commands.BucketType.user)
+    @commands.cooldown(1, 1, commands.BucketType.user)
     async def likes(self, ctx, target1: discord.Member, target2: discord.Member):
         sitting_message = discord.Embed(
             description=f'{target1.mention} and {target2.mention} sitting in the tree\nK-i-s-s-i-n-g! \nFirst comes '
