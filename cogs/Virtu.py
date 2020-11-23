@@ -131,7 +131,7 @@ class Virtu(commands.Cog):
         if robber_savings >= amount > 0 and target_savings >= amount:
             result = random.randint(1, (100+chance))
             if result <= 55:
-                change_virtu(ctx.author.id, amount)
+                change_virtu(ctx.author.id, -1*amount)
                 change_virtu(target.id, amount)
                 await ctx.send(embed=easy_embed(ctx, 'screwed up the robbery.'))
             else:
