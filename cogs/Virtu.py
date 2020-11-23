@@ -5,7 +5,7 @@ from discord.ext import commands
 import random
 
 
-# Sync defnitions
+# Sync definitions
 def get_prefix(ctx):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
@@ -35,9 +35,9 @@ def change_virtu(ctx, amount):
             json.dump(virtu_amount, file, indent=4)
 
 
-def easy_embed(ctx, message):
+def easy_embed(message):
     embed = discord.Embed(
-        description=f'{ctx.author.mention} {message}',
+        description={message},
         color=discord.Color.purple()
     )
     return embed
@@ -133,11 +133,11 @@ class Virtu(commands.Cog):
             if result <= 55:
                 change_virtu(ctx.author.id, -1*amount)
                 change_virtu(target.id, amount)
-                await ctx.send(embed=easy_embed(ctx, 'screwed up the robbery.'))
+                await ctx.send(embed=easy_embed(f'{ctx.author.mention} screwed up the robbery.'))
             else:
                 change_virtu(ctx.author.id, amount)
                 change_virtu(target.id, (-1 * amount))
-                await ctx.send(embed=easy_embed(ctx, 'successfully pulled off the robbery.'))
+                await ctx.send(embed=easy_embed(f'{ctx.author.mention} successfully pulled off the robbery.'))
         else:
             fail_message = discord.Embed(
                 description=f'{ctx.author.mention} you or the target do not have enough virtù to do this',
