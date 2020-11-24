@@ -31,7 +31,7 @@ class Moderator(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
-        if message.content.lower() == 'hello':
+        if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
             hello_msg = discord.Embed(
                 description=f'Hello {message.author.mention}!',
                 color=discord.Color.purple()

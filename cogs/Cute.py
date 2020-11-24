@@ -26,8 +26,8 @@ class Cute(commands.Cog):
     async def likes(self, ctx, target1: discord.Member, target2: discord.Member):
         if not is_banned(ctx):
             sitting_message = discord.Embed(
-                description=f'{target1.mention} and {target2.mention} sitting in the tree\nK-i-s-s-i-n-g! \nFirst comes '
-                            f'love.\nThen comes marriage.\nThen comes baby in the baby carriage.',
+                description=f'{target1.mention} and {target2.mention} sitting in the tree\nK-i-s-s-i-n-g! \nFirst comes'
+                            f' love.\nThen comes marriage.\nThen comes baby in the baby carriage.',
                 color=discord.Color.purple()
             )
 
@@ -43,6 +43,17 @@ class Cute(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=smash_msg)
+
+    @commands.command(help='Specifies who is sus')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def sus(self, ctx, target: discord.Member):
+        if not is_banned(ctx):
+            sus_msg = discord.Embed(
+                description=f'{ctx.author.mention} thinks {target.mention} is sus 😏',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=sus_msg)
 
 
 def setup(client):
