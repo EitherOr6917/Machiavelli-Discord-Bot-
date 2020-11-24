@@ -1,6 +1,7 @@
 # Import statements
 import discord
 from discord.ext import commands
+import json
 
 
 # Functions
@@ -31,6 +32,17 @@ class Cute(commands.Cog):
             )
 
             await ctx.send(embed=sitting_message)
+
+    @commands.command(help='Smash someone')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def smash(self, ctx, target: discord.Member):
+        if not is_banned(ctx):
+            smash_msg = discord.Embed(
+                description=f'{ctx.author.mention} wants to smash {target.mention}',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=smash_msg)
 
 
 def setup(client):
