@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 import json
+import random
 
 
 # Functions
@@ -54,6 +55,25 @@ class Cute(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=sus_msg)
+
+    @commands.command(help='Says who is in the cult')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def cummiecult(self, ctx, target: discord.Member):
+        if not is_banned(ctx):
+            result = random.randint(1, 10)
+            if result != 1:
+                msg = discord.Embed(
+                    description=f'{target.mention} is part of the cummie cult',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=msg)
+            else:
+                msg = discord.Embed(
+                    description=f'{ctx.author.mention} is part of the cummie cult',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=msg)
 
 
 def setup(client):
