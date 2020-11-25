@@ -44,6 +44,13 @@ def is_banned(ctx):
     return str(ctx.author.id) in banned_users
 
 
+def channel_banned(ctx):
+    with open('jsons/bannedChannels.json', 'r') as file:
+        banned_channels = json.load(file)
+
+    return str(ctx.channel.id) in banned_channels
+
+
 def check_actions():
     with open('jsons/duel.json', 'r') as file:
         duel_list = json.load(file)
@@ -62,7 +69,7 @@ class Games(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def initiate_duel(self, ctx, target: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             with open('jsons/duel.json', 'r') as file:
                 duel_list = json.load(file)
             if not bool(duel_list):
@@ -89,7 +96,7 @@ class Games(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def cancel_duel(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             with open('jsons/duel.json', 'r') as file:
                 duel_list = json.load(file)
             if bool(duel_list):
@@ -115,7 +122,7 @@ class Games(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def duel_attack(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             with open('jsons/duel.json', 'r') as file:
                 duel_list = json.load(file)
             if bool(duel_list) and ((duel_list['Player 1'] == str(ctx.author.id)) or (duel_list['Player 2'] ==

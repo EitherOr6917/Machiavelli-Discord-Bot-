@@ -13,6 +13,13 @@ def is_banned(ctx):
     return str(ctx.author.id) in banned_users
 
 
+def channel_banned(ctx):
+    with open('jsons/bannedChannels.json', 'r') as file:
+        banned_channels = json.load(file)
+
+    return str(ctx.channel.id) in banned_channels
+
+
 class FunCommands(commands.Cog):
 
     def __init__(self, client):
@@ -25,7 +32,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def kill(self, ctx, target: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             self_kill_messages = ['decided to off themselves.', 'decided the donuts weren\'t good enough.',
                                   'wants to try making toast in a bath',
                                   'decides to become a ceiling fixture.']
@@ -48,7 +55,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def mean(self, ctx, meanee: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if meanee == ctx.author:
                 mean_world = discord.Embed(
                     description=f'{ctx.author.mention} says the world is an cruel place',
@@ -68,7 +75,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def say(self, ctx, *, speechbubble):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if speechbubble.endswith('-hide'):
 
                 hiddenspeechbubble = speechbubble[:-5]
@@ -91,7 +98,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def cookie(self, ctx, cookiee: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if cookiee == ctx.author:
                 gift_self = discord.Embed(
                     description=f'{ctx.author.mention} rewards themself with a cookie.',
@@ -109,7 +116,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def simp(self, ctx, simpee: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if simpee == ctx.author:
                 simp_message1 = discord.Embed(
                     description=f'{ctx.author.mention} simps themself. Slightly narcissistic ngl.',
@@ -128,7 +135,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def superior(self, ctx, superioree: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             is_sup = ['is literally superior to', 'falsely believes they\'re superior to']
 
             sup_message = discord.Embed(
@@ -141,7 +148,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def quote(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             machiavelli_quotes = [
                 '“Everyone sees what you appear to be, few experience what you really are.”\n― Niccolò Machiavelli, '
                 'The Prince',
@@ -197,7 +204,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def noballs(self, ctx, target: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             noball_message = discord.Embed(
                 description=f'{target.mention} has no balls.',
                 color=discord.Color.purple()
@@ -209,7 +216,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def hasballs(self, ctx, target: discord.Member = 'none'):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if target == 'none':
                 ball_message = discord.Embed(
                     description=f'{ctx.author.mention} has balls.',
@@ -227,7 +234,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def issimp(self, ctx, target: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             simp_message = discord.Embed(
                 description=f'{target.mention} is a simp.',
                 color=discord.Color.purple()
@@ -239,7 +246,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def f(self, ctx, *, target=''):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if target == '':
                 f_message = discord.Embed(
                     description=f'Press f to pay respects',
@@ -259,7 +266,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def bet(self, ctx, *, gamblees):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             gamblers = gamblees.split()
             gambler_winner = random.choice(gamblers)
 
@@ -273,7 +280,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def bruh(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             bruv = discord.Embed(
                 description=f'bruh',
                 color=discord.Color.purple()

@@ -17,6 +17,13 @@ def is_banned(ctx):
     return str(ctx.author.id) in banned_users
 
 
+def channel_banned(ctx):
+    with open('jsons/bannedChannels.json', 'r') as file:
+        banned_channels = json.load(file)
+
+    return str(ctx.channel.id) in banned_channels
+
+
 class Moderator(commands.Cog):
 
     def __init__(self, client):
@@ -31,14 +38,15 @@ class Moderator(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
-        if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
-            hello_msg = discord.Embed(
-                description=f'Hello {message.author.mention}!',
-                color=discord.Color.purple()
-            )
+        if not is_banned(message) and not channel_banned(message):
+            if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
+                hello_msg = discord.Embed(
+                    description=f'Hello {message.author.mention}!',
+                    color=discord.Color.purple()
+                )
 
-            await message.channel.send(embed=hello_msg)
-        return
+                await message.channel.send(embed=hello_msg)
+            return
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -47,34 +55,22 @@ class Moderator(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if isinstance(error, commands.UserInputError):
-                error_message1 = discord.Embed(
-                    description=f'{ctx.author.mention} please pass in correct arguments. For more information, '
-                                f'use >help '
-                                f'\'command\'.',
-                    color=discord.Color.purple()
-                )
-                await ctx.send(embed=error_message1)
+                await ctx.send(f'{ctx.author.mention} please pass in correct arguments. For more information, '
+                               f'use >help '
+                               f'\'command\'.')
             if isinstance(error, commands.CommandNotFound):
-                error_message2 = discord.Embed(
-                    description=f'{ctx.author.mention} that command does not exist.',
-                    color=discord.Color.purple()
-                )
-                await ctx.send(embed=error_message2)
+                await ctx.send(f'{ctx.author.mention} that command does not exist.')
             if isinstance(error, commands.MissingPermissions):
-                error_message3 = discord.Embed(
-                    description=f'{ctx.author.mention} you do not have the required permissions for that command.',
-                    color=discord.Color.purple()
-                )
-                await ctx.send(embed=error_message3)
+                await ctx.send(f'{ctx.author.mention} you do not have the required permissions for that command.')
 
     # Commands
     @commands.command(help='Returns the bot\'s ping')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def ping(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             ping_message = discord.Embed(
                 description=f'Latency: {int(self.client.latency * 1000)} ms.',
                 color=discord.Color.purple()
@@ -86,7 +82,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def clear(self, ctx, amount=5):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.channel.purge(limit=amount + 1)
 
             cleared_message = discord.Embed(
@@ -100,7 +96,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def direct_message(self, ctx, messagee: discord.Member, *, message):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             dm_sent = discord.Embed(
                 description=f':upside_down: {ctx.author.mention} sent!',
                 color=discord.Color.purple()
@@ -112,7 +108,7 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def github(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             github_message = discord.Embed(
                 description=f'My code is on Github here: https://github.com/EitherOr6917/eitherBot.py',
                 color=discord.Color.purple()
@@ -124,7 +120,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def changeprefix(self, ctx, prefix):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             with open('jsons/prefixes.json', 'r') as file:
                 prefixes = json.load(file)
 
@@ -143,7 +139,7 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def vote(self, ctx, *, question):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.channel.purge(limit=1)
             op_msg = discord.Embed(
                 description=f'{question}',
@@ -158,7 +154,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             for x in range(loop_count):
                 await channel.send(message)
             await ctx.author.send(f'{ctx.author.mention} I finished spamming lmao.')
@@ -168,7 +164,7 @@ class Moderator(commands.Cog):
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             loop_embed = discord.Embed(
                 description=message,
                 color=discord.Color.purple()
@@ -181,7 +177,7 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def checkid(self, ctx, target: discord.Member):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             id_msg = discord.Embed(
                 description=f'{target.display_name}\'s discord id is {target.id}',
                 color=discord.Color.purple()
@@ -193,7 +189,7 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def invite(self, ctx):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             invite_msg = discord.Embed(
                 description='Here is the link to invite Machiavelli to your server: '
                             'https://discord.com/api/oauth2/authorize?client_id=761439397525716992&permissions=8'
@@ -230,7 +226,7 @@ class Moderator(commands.Cog):
 
     @commands.command(help='Bans a user from using the bot')
     async def ban(self, ctx, target: discord.User):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
                 with open('jsons/banned.json', 'r') as file:
                     banned_users = json.load(file)
@@ -254,7 +250,7 @@ class Moderator(commands.Cog):
 
     @commands.command(help='Unbans a user from using the bot')
     async def unban(self, ctx, target: discord.User):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
                 with open('jsons/banned.json', 'r') as file:
                     banned_users = json.load(file)
@@ -275,6 +271,46 @@ class Moderator(commands.Cog):
                     color=discord.Color.purple()
                 )
                 await ctx.send(embed=no_can_do)
+
+    @commands.command(help='Bans a text channel from using the bot')
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def ban_channel(self, ctx, target: discord.TextChannel):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            with open('jsons/bannedChannels.json', 'r') as file:
+                banned_users = json.load(file)
+
+            banned_users.append(str(target.id))
+
+            with open('jsons/bannedChannels.json', 'w') as file:
+                json.dump(banned_users, file, indent=4)
+
+            ban_msg = discord.Embed(
+                description=f'{ctx.author.mention}, I can no longer be used in {target.mention}.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=ban_msg)
+
+    @commands.command(help='Unbans a text channel from using the bot')
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def unban_channel(self, ctx, target: discord.TextChannel):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            with open('jsons/bannedChannels.json', 'r') as file:
+                banned_users = json.load(file)
+
+                banned_users.remove(str(target.id))
+
+            with open('jsons/bannedChannels.json', 'w') as file:
+                json.dump(banned_users, file, indent=4)
+
+            ban_msg = discord.Embed(
+                description=f'{ctx.author.mention}, I now usable in {target.mention}.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=ban_msg)
 
 
 def setup(client):

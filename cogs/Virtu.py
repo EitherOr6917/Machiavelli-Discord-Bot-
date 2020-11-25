@@ -13,6 +13,13 @@ def is_banned(ctx):
     return str(ctx.author.id) in banned_users
 
 
+def channel_banned(ctx):
+    with open('jsons/bannedChannels.json', 'r') as file:
+        banned_channels = json.load(file)
+
+    return str(ctx.channel.id) in banned_channels
+
+
 def get_prefix(ctx):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
@@ -81,7 +88,7 @@ class Virtu(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def virtu(self, ctx, target: discord.Member = ''):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             citizen = target
             if citizen == '':
                 citizen = ctx.author
@@ -109,7 +116,7 @@ class Virtu(commands.Cog):
             if temp_record_editable >= level_up_cost:
                 leveling_up = int(temp_record_editable/level_up_cost)
                 virtu_levels_list[str(citizen.id)] += leveling_up
-                virtu_record_list[str(citizen.id)] -= temp_record_editable
+                virtu_record_list[str(citizen.id)] -= level_up_cost
 
                 with open('jsons/virtuLevels.json', 'w') as file:
                     json.dump(virtu_levels_list, file, indent=4)
@@ -132,7 +139,7 @@ class Virtu(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def rob(self, ctx, target: discord.Member, amount: int):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             random.seed()
             robber_savings = check_virtu(ctx.author.id)
             target_savings = check_virtu(target.id)
@@ -159,7 +166,7 @@ class Virtu(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def give(self, ctx, target: discord.Member, amount: int):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if check_virtu(ctx.author.id) >= amount:
                 change_virtu(ctx.author.id, -1 * amount)
                 change_virtu(target.id, amount)
@@ -180,7 +187,7 @@ class Virtu(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def sgive(self, ctx, target: discord.Member, amount: int):
-        if not is_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if ctx.author.id == 406663932166668288:
                 change_virtu(target.id, amount)
 
