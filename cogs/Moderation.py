@@ -47,25 +47,27 @@ class Moderator(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.UserInputError):
-            error_message1 = discord.Embed(
-                description=f'{ctx.author.mention} please pass in correct arguments. For more information, use >help '
-                            f'\'command\'.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=error_message1)
-        if isinstance(error, commands.CommandNotFound):
-            error_message2 = discord.Embed(
-                description=f'{ctx.author.mention} that command does not exist.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=error_message2)
-        if isinstance(error, commands.MissingPermissions):
-            error_message3 = discord.Embed(
-                description=f'{ctx.author.mention} you do not have the required permissions for that command.',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=error_message3)
+        if not is_banned(ctx):
+            if isinstance(error, commands.UserInputError):
+                error_message1 = discord.Embed(
+                    description=f'{ctx.author.mention} please pass in correct arguments. For more information, '
+                                f'use >help '
+                                f'\'command\'.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=error_message1)
+            if isinstance(error, commands.CommandNotFound):
+                error_message2 = discord.Embed(
+                    description=f'{ctx.author.mention} that command does not exist.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=error_message2)
+            if isinstance(error, commands.MissingPermissions):
+                error_message3 = discord.Embed(
+                    description=f'{ctx.author.mention} you do not have the required permissions for that command.',
+                    color=discord.Color.purple()
+                )
+                await ctx.send(embed=error_message3)
 
     # Commands
     @commands.command(help='Returns the bot\'s ping')
@@ -74,7 +76,7 @@ class Moderator(commands.Cog):
     async def ping(self, ctx):
         if not is_banned(ctx):
             ping_message = discord.Embed(
-                description=f'Latency: {"{:.1f}".format(self.client.latency * 1000)}ms.',
+                description=f'Latency: {int(self.client.latency * 1000)} ms.',
                 color=discord.Color.purple()
             )
             await ctx.send(embed=ping_message)
