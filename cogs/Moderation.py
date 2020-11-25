@@ -6,7 +6,7 @@ import random
 import discord.utils
 
 # Variables
-statuses = ['You', 'My opponents', 'Italian royalty', 'Coup planning']
+statuses = ['you', 'my opponents', 'italian royalty', 'coup planning', 'with someone 😏']
 
 
 # Functions
