@@ -27,6 +27,7 @@ class Cute(commands.Cog):
     # Events
 
     # Commands
+    # TODO Implement at the very least a working rickroll command
     @commands.command(help='Rickrolls the voicechat you are in')
     @commands.guild_only()
     @commands.cooldown(1, 300, commands.BucketType.user)

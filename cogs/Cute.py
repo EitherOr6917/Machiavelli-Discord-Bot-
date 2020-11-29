@@ -82,7 +82,6 @@ class Cute(commands.Cog):
                 )
                 await ctx.send(embed=msg)
 
-    # TODO Fix this command so it works
     @commands.command(help='Choke the shit out of')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
@@ -92,7 +91,7 @@ class Cute(commands.Cog):
                 description=f'{ctx.author.mention} chokes the shit out of {target.mention}',
                 color=discord.Color.purple()
             )
-            msg.set_thumbnail(url='')
+            # msg.set_image(url='')
 
             await ctx.send(embed=msg)
 
