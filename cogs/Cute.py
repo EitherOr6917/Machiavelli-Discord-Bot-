@@ -82,6 +82,20 @@ class Cute(commands.Cog):
                 )
                 await ctx.send(embed=msg)
 
+    # TODO Fix this command so it works
+    @commands.command(help='Choke the shit out of')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def choektheshitouta(self, ctx, target: discord.Member):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            msg = discord.Embed(
+                description=f'{ctx.author.mention} chokes the shit out of {target.mention}',
+                color=discord.Color.purple()
+            )
+            msg.set_thumbnail(url='')
+
+            await ctx.send(embed=msg)
+
 
 def setup(client):
     client.add_cog(Cute(client))
