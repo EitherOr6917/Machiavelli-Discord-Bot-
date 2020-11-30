@@ -95,6 +95,16 @@ class Cute(commands.Cog):
 
             await ctx.send(embed=msg)
 
+    @commands.command(help='Fuck you {specified user} :)')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def fuckyou(self, ctx, target: discord.Member):
+        msg = discord.Embed(
+            description=f'{ctx.author.mention} wants to fuck {target.mention}',
+            color=discord.Color.purple()
+        )
+        await ctx.send(embed=msg)
+
 
 def setup(client):
     client.add_cog(Cute(client))

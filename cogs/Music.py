@@ -25,7 +25,7 @@ def channel_banned(ctx):
 youtube_dl.utils.bug_reports_message = lambda: ''
 ytdl_format_options = {
     'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'outtmpl': 'music/%(extractor)s-%(id)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
@@ -72,7 +72,6 @@ class Music(commands.Cog):
     # Events
 
     # Commands
-    # TODO Implement at the very least a working rickroll command
     @commands.command(help='Connects to specified voice channel')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
@@ -90,29 +89,24 @@ class Music(commands.Cog):
         if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.voice_client.disconnect()
 
-    @commands.command(help='Plays audio from youtube link')
-    @commands.guild_only()
-    @commands.cooldown(1, 2, commands.BucketType.user)
-    async def play(self, ctx, *, url):
-        if not is_banned(ctx) and not channel_banned(ctx):
-            async with ctx.typing():
-                player = await YTDLSource.from_url(url, loop=self.client.loop)
-                ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-
-            await ctx.send(f'Now playing {player.title}')
-
-    @commands.command(help='Changes the volume of the bot')
-    @commands.guild_only()
-    @commands.cooldown(1, 1, commands.BucketType.user)
-    async def volume(self, ctx, volume: int):
-        if not is_banned(ctx) and not channel_banned(ctx):
-            ctx.voice_client.source.volume = volume / 100
-            await ctx.send(f'Changed volume to {volume}%')
-
-    @commands.command(help='Checks info')
-    async def checkstuff(self, ctx):
-        if not is_banned(ctx) and not channel_banned(ctx):
-            print()
+    # @commands.command(help='Plays audio from youtube link')
+    # @commands.guild_only()
+    # @commands.cooldown(1, 2, commands.BucketType.user)
+    # async def play(self, ctx, *, url):
+    #     if not is_banned(ctx) and not channel_banned(ctx):
+    #         async with ctx.typing():
+    #             player = await YTDLSource.from_url(url, loop=self.client.loop)
+    #             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+    #
+    # #         await ctx.send(f'Now playing {player.title}')
+    #
+    # @commands.command(help='Changes the volume of the bot')
+    # @commands.guild_only()
+    # @commands.cooldown(1, 1, commands.BucketType.user)
+    # async def volume(self, ctx, volume: int):
+    #     if not is_banned(ctx) and not channel_banned(ctx):
+    #         ctx.voice_client.source.volume = volume / 100
+    #         await ctx.send(f'Changed volume to {volume}%')
 
 
 def setup(client):
