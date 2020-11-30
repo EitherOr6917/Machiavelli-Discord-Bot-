@@ -91,7 +91,7 @@ class Cute(commands.Cog):
                 description=f'{ctx.author.mention} chokes the shit out of {target.mention}',
                 color=discord.Color.purple()
             )
-            # msg.set_image(url='')
+            msg.set_image(url='')
 
             await ctx.send(embed=msg)
 

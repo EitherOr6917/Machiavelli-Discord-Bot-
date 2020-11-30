@@ -50,7 +50,7 @@ class Moderator(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'Logged in as: {self.client.user}\nDiscord version: {discord.__version__}\n')
+        print(f'Logged in as: {self.client.user}\nDiscord.py version: {discord.__version__}\n')
         self.change_status.start()
 
     @commands.Cog.listener()

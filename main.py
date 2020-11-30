@@ -7,6 +7,7 @@ from discord.ext import commands
 import logging
 import json
 
+
 # Variable declarations
 token = os.environ.get('DISCORD_TOKEN')
 intents = discord.Intents.default()
@@ -15,11 +16,11 @@ logging.basicConfig(level=logging.INFO)
 
 
 # Prefixes
-def get_prefix(client, message):
+def get_prefix(bot, message):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
-    return prefixes[str(message.guild.id)]
+    return commands.when_mentioned_or(prefixes[str(message.guild.id)])(bot, message)
 
 
 def is_banned(ctx):
