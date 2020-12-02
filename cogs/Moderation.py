@@ -119,7 +119,7 @@ class Moderator(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     @commands.has_permissions(administrator=True)
-    async def changeprefix(self, ctx, prefix):
+    async def change_prefix(self, ctx, prefix):
         if not is_banned(ctx) and not channel_banned(ctx):
             with open('jsons/prefixes.json', 'r') as file:
                 prefixes = json.load(file)

@@ -290,16 +290,18 @@ class FunCommands(commands.Cog):
     @commands.command(help='Sends out dms with secret santa targets')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def secretsanta(self, ctx, *people: discord.Member):
+    async def secret_santa(self, ctx, *people: discord.Member):
         if not is_banned(ctx) and not channel_banned(ctx):
             people_list = list(people)
             random.shuffle(people_list)
-            for i in people_list:
-                position = people_list.index(i)
-                if position == len(people_list)-1:
-                    position = 0
-                target = people_list[position+1]
-                await i.send(f'You\'re target is {target.mention}')
+            number = len(people_list)
+            for i in range(len(people_list)):
+                targeter = people_list[i]
+                if i == number-1:
+                    target = people_list[0]
+                else:
+                    target = people_list[i + 1]
+                await targeter.send(f'Targeter: {targeter} \nTarget: {target}')
 
 
 def setup(client):

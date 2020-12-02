@@ -98,7 +98,7 @@ class Music(commands.Cog):
     #             player = await YTDLSource.from_url(url, loop=self.client.loop)
     #             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
     #
-    # #         await ctx.send(f'Now playing {player.title}')
+    #         await ctx.send(f'Now playing {player.title}')
     #
     # @commands.command(help='Changes the volume of the bot')
     # @commands.guild_only()

@@ -35,7 +35,7 @@ class Cute(commands.Cog):
         if not is_banned(ctx) and not channel_banned(ctx):
             sitting_message = discord.Embed(
                 description=f'{target1.mention} and {target2.mention} sitting in the tree\nK-i-s-s-i-n-g! \nFirst comes'
-                            f' love.\nThen comes marriage.\nThen comes baby in the baby carriage.',
+                            f' love.\nThen comes marriage.\nThen comes a baby in the baby carriage.',
                 color=discord.Color.purple()
             )
 
@@ -95,10 +95,10 @@ class Cute(commands.Cog):
 
             await ctx.send(embed=msg)
 
-    @commands.command(help='Fuck you {specified user} :)')
+    @commands.command(aliases=['fuckyou'], help='Fuck you {specified user} :)')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def fuckyou(self, ctx, target: discord.Member):
+    async def fuck_you(self, ctx, target: discord.Member):
         msg = discord.Embed(
             description=f'{ctx.author.mention} wants to fuck {target.mention}',
             color=discord.Color.purple()
