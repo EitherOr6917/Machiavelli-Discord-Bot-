@@ -303,6 +303,13 @@ class FunCommands(commands.Cog):
                     target = people_list[i + 1]
                 await targeter.send(f'Targeter: {targeter} \nTarget: {target}')
 
+    @commands.command(aliases=['goodjob!'], help='Says good job ')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def goodjob(self, ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            await ctx.send(f'Awww, thank you {ctx.author.display_name}')
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
