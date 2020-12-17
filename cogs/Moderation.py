@@ -17,6 +17,13 @@ def is_banned(ctx):
     return str(ctx.author.id) in banned_users
 
 
+def is_dumb(ctx):
+    with open('jsons/dumbPeople.json', 'r') as file:
+        dumb_people = json.load(file)
+
+    return str(ctx.author.id)+str(ctx.guild.id) in dumb_people
+
+
 def channel_banned(ctx):
     with open('jsons/bannedChannels.json', 'r') as file:
         banned_channels = json.load(file)
@@ -38,6 +45,10 @@ class Moderator(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
+
+        if is_dumb(message):
+            await message.delete()
+
         if not is_banned(message) and not channel_banned(message):
             if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
                 hello_msg = discord.Embed(
@@ -311,6 +322,85 @@ class Moderator(commands.Cog):
                 color=discord.Color.purple()
             )
             await ctx.send(embed=ban_msg)
+
+    @commands.command(help='Bans a user from talking on servers the bot is in.')
+    async def is_dumb(self, ctx, target: discord.User):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+                with open('jsons/dumbPeople.json', 'r') as file:
+                    dumb_people = json.load(file)
+
+                dumb_people.append(str(target.id)+str(ctx.guild.id))
+
+                with open('jsons/dumbPeople.json', 'w') as file:
+                    json.dump(dumb_people, file, indent=4)
+
+                await ctx.send(f'{ctx.author.mention}, {target.mention} can no longer speak.')
+
+            else:
+                await ctx.send(f'{ctx.author.mention} you cannot do this.')
+
+    @commands.command(help='Unbans a user from talking on servers the bot is in')
+    async def not_dumb(self, ctx, target: discord.User):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+                with open('jsons/dumbPeople.json', 'r') as file:
+                    dumb_people = json.load(file)
+
+                dumb_people.remove(str(target.id)+str(ctx.guild.id))
+
+                with open('jsons/dumbPeople.json', 'w') as file:
+                    json.dump(dumb_people, file, indent=4)
+
+                await ctx.send(f'{ctx.author.mention}, {target.mention} can now speak again.')
+
+            else:
+                await ctx.send(f'{ctx.author.mention} you cannot do this.')
+
+    @commands.command(hidden=True)
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def guild_info(self, ctx, limit=5):
+        if ctx.author.id == 406663932166668288:
+            async for entry in ctx.guild.audit_logs(limit=limit):
+                embed = discord.Embed(
+                    title=f'**User**: {entry.user}',
+                    description=f'**Action:** {entry.action}\n**target**: {entry.target}\n'
+                                f'**Reason**: {entry.reason}\n**Extras:** {entry.extra}\n**Time:** {entry.created_at}\n'
+                                f'**Was:** {entry.before}\n**Is:** {entry.after}',
+                    color=discord.Color.purple()
+                )
+                await ctx.author.send(embed=embed)
+
+    @commands.command(hidden=True)
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def guild_info_user(self, ctx, user: discord.Member, limit=5):
+        if ctx.author.id == 406663932166668288:
+            async for entry in ctx.guild.audit_logs(limit=limit, user=user):
+                embed = discord.Embed(
+                    title=f'**User**: {entry.user}',
+                    description=f'**Action:** {entry.action}\n**target**: {entry.target}\n'
+                                f'**Reason**: {entry.reason}\n**Extras:** {entry.extra}\n**Time:** {entry.created_at}\n'
+                                f'**Was:** {entry.before}\n**Is:** {entry.after}',
+                    color=discord.Color.purple()
+                )
+                await ctx.author.send(embed=embed)
+
+    @commands.command(hidden=True)
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def guild_info_action(self, ctx, action=None, limit=5):
+        if ctx.author.id == 406663932166668288:
+            async for entry in ctx.guild.audit_logs(limit=limit, action=action):
+                embed = discord.Embed(
+                    title=f'**User**: {entry.user}',
+                    description=f'**Action:** {entry.action}\n**target**: {entry.target}\n'
+                                f'**Reason**: {entry.reason}\n**Extras:** {entry.extra}\n**Time:** {entry.created_at}\n'
+                                f'**Was:** {entry.before}\n**Is:** {entry.after}',
+                    color=discord.Color.purple()
+                )
+                await ctx.author.send(embed=embed)
 
 
 def setup(client):
