@@ -143,6 +143,7 @@ class Virtu(commands.Cog):
             random.seed()
             robber_savings = check_virtu(ctx.author.id)
             target_savings = check_virtu(target.id)
+            print(5)
             chance = int(check_virtu(target.id)/check_virtu(ctx.author.id)*50)
             if robber_savings >= amount > 0 and target_savings >= amount:
                 result = random.randint(1, (100+chance))

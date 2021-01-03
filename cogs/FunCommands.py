@@ -303,12 +303,45 @@ class FunCommands(commands.Cog):
                     target = people_list[i + 1]
                 await targeter.send(f'Targeter: {targeter} \nTarget: {target}')
 
-    @commands.command(aliases=['goodjob!'], help='Says good job ')
+    @commands.command(aliases=['goodjob!'], help='Tell the bot \'good job\'')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def goodjob(self, ctx):
         if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'Awww, thank you {ctx.author.display_name}')
+
+    @commands.command(aliases=['badjob!'], help='Tell the bot \'bad job\'')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def badjob(self, ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            random.seed()
+            neg_msg = ['Well fuck you', 'I\'m trying my best', 'Fuck offff', 'That\'s rather mean of you']
+            await ctx.send(f'{random.choice(neg_msg)} {ctx.author.display_name}')
+
+    @commands.command(help='Does nothing')
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    @commands.guild_only()
+    async def nothing(self, ctx):
+        return
+
+    @commands.command(help='The specified user is dumb asf')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def dumb_fucker(self, ctx, bad_person: discord.Member):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            await ctx.send(f'{bad_person.mention} is one dumb motherfucker.')
+
+    @commands.command(help='Oh my G.')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def omyg(self, ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            await ctx.message.delete()
+            messages = await ctx.channel.history(limit=1).flatten()
+            message = messages[0]
+            await message.add_reaction('🇬')
+            await ctx.send(f'Oh my **G**.')
 
 
 def setup(client):

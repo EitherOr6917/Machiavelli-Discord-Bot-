@@ -105,6 +105,40 @@ class Cute(commands.Cog):
         )
         await ctx.send(embed=msg)
 
+    @commands.command(help='The specified user is bad')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def is_bad(self, ctx, bad_person: discord.Member):
+        if ctx.author.id != 406663932166668288:  # Checking if I was the one to initiate the command
+            msg = discord.Embed(
+                description=f'{ctx.author.mention} wants to do bad things to  {bad_person.mention}',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=msg)
+        else:
+            msg = discord.Embed(
+                description=f'{bad_person.mention} is bad.',
+                color=discord.Color.purple()
+            )
+            await ctx.send(embed=msg)
+
+    # @commands.command(help='The specified user is bad')
+    # @commands.guild_only()
+    # @commands.cooldown(1, 1, commands.BucketType.user)
+    # async def is_bad(self, ctx, bad_person: discord.Member):
+    #     if ctx.author.id != 406663932166668288:  # Checking if I was the one to initiate the command
+    #         msg = discord.Embed(
+    #             description=f'{ctx.author.mention} wants to do bad things to  {bad_person.mention}',
+    #             color=discord.Color.purple()
+    #         )
+    #         await ctx.send(embed=msg)
+    #     else:
+    #         msg = discord.Embed(
+    #             description=f'{bad_person.mention} is bad.',
+    #             color=discord.Color.purple()
+    #         )
+    #         await ctx.send(embed=msg)
+
 
 def setup(client):
     client.add_cog(Cute(client))
