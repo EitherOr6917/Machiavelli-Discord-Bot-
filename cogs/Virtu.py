@@ -143,25 +143,19 @@ class Virtu(commands.Cog):
             random.seed()
             robber_savings = check_virtu(ctx.author.id)
             target_savings = check_virtu(target.id)
-            print(5)
             chance = int(check_virtu(target.id)/check_virtu(ctx.author.id)*50)
             if robber_savings >= amount > 0 and target_savings >= amount:
                 result = random.randint(1, (100+chance))
                 if result <= 55:
                     change_virtu(ctx.author.id, -1*amount)
                     change_virtu(target.id, amount)
-                    await ctx.send(embed=easy_embed(f'{ctx.author.mention} screwed up the robbery.'))
+                    await ctx.send(f'{ctx.author.mention} screwed up the robbery.')
                 else:
                     change_virtu(ctx.author.id, amount)
                     change_virtu(target.id, (-1 * amount))
-                    await ctx.send(embed=easy_embed(f'{ctx.author.mention} successfully pulled off the robbery.'))
+                    await ctx.send(f'{ctx.author.mention} successfully pulled off the robbery.')
             else:
-                fail_message = discord.Embed(
-                    description=f'{ctx.author.mention} you or the target do not have enough virtù to do this',
-                    color=discord.Color.purple()
-                )
-
-                await ctx.send(embed=fail_message)
+                await ctx.send(f'{ctx.author.mention} you or the target do not have enough virtù to do this')
 
     @commands.command(help='Give another member some of your virtù')
     @commands.guild_only()

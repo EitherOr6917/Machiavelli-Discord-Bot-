@@ -341,7 +341,7 @@ class FunCommands(commands.Cog):
             messages = await ctx.channel.history(limit=1).flatten()
             message = messages[0]
             await message.add_reaction('🇬')
-            await ctx.send(f'Oh my **G**.')
+            await ctx.send(f'**Oh my** ***G***')
 
 
 def setup(client):
