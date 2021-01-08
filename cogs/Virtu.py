@@ -124,16 +124,15 @@ class Virtu(commands.Cog):
                     json.dump(virtu_record_list, file, indent=4)
 
             # Sends embeded message
-            file = discord.File('./images/vLogo.png', filename='vimage.png')
             virtu_msg = discord.Embed(
                 title=f'{citizen.display_name}\'s Virtù',
                 description=f'Virtù Level: {virtu_levels_list[str(citizen.id)]}\nVirtù total: '
                             f'{virtu_record_list[str(citizen.id)]}',
                 color=discord.Color.purple()
             )
-            virtu_msg.set_thumbnail(url='attachment://vimage.png')
+            virtu_msg.set_thumbnail(url=citizen.avatar_url)
 
-            await ctx.send(file=file, embed=virtu_msg)
+            await ctx.send(embed=virtu_msg)
 
     @commands.command(help='Attempts to take virtu from the target')
     @commands.guild_only()
