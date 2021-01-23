@@ -136,25 +136,24 @@ class FunCommands(commands.Cog):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'{target.display_name} has no balls.')
 
-    @commands.command(help='Says that the specified user has balls')
+    @commands.command(aliases=['hasballs'], help='Says that the specified user has balls')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def hasballs(self, ctx, target: discord.Member = 'none'):
+    async def has_balls(self, ctx, target: discord.Member = 'none'):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             if target == 'none':
                 await ctx.send(f'{ctx.author.display_name} has balls.')
             else:
                 await ctx.send(f'{target.display_name} has balls.')
 
-    @commands.command(help='Specified user is a simp')
+    @commands.command(aliases=['issimp'], help='Specified user is a simp')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def issimp(self, ctx, target: discord.Member):
+    async def is_simp(self, ctx, target: discord.Member):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'{target.display_name} is a simp.')
 
     @commands.command(help='Press F to pay respects (target optional)')
-    @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def f(self, ctx, *, target=''):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
@@ -169,11 +168,11 @@ class FunCommands(commands.Cog):
     @commands.command(help='Decides which of the given options wins')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def bet(self, ctx, *, gamblees):
+    async def choose(self, ctx, *, options):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
-            gamblers = gamblees.split()
-            gambler_winner = random.choice(gamblers)
-            await ctx.send(f'{gambler_winner} wins.')
+            option_list = options.split()
+            pick = random.choice(option_list)
+            await ctx.send(f'{pick} wins.')
 
     @commands.command(help='Says bruh')
     @commands.guild_only()
@@ -182,7 +181,7 @@ class FunCommands(commands.Cog):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'bruh')
 
-    @commands.command(help='Sends out dms with secret santa targets')
+    @commands.command(aliases=['secretsanta', 'ss'], help='Sends out dms with secret santa targets')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def secret_santa(self, ctx, *people: discord.Member):
@@ -198,17 +197,17 @@ class FunCommands(commands.Cog):
                     target = people_list[i + 1]
                 await targeter.send(f'Targeter: {targeter} \nTarget: {target}')
 
-    @commands.command(aliases=['goodjob!'], help='Tell the bot \'good job\'')
+    @commands.command(aliases=['goodjob!', 'goodjob'], help='Tell the bot \'good job\'')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def goodjob(self, ctx):
+    async def good_job(self, ctx):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'Awww, thank you {ctx.author.display_name}')
 
-    @commands.command(aliases=['badjob!'], help='Tell the bot \'bad job\'')
+    @commands.command(aliases=['badjob!', 'badjob'], help='Tell the bot \'bad job\'')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def badjob(self, ctx):
+    async def bad_job(self, ctx):
         if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             random.seed()
             neg_msg = ['Well fuck you', 'I\'m trying my best', 'Fuck offff', 'That\'s rather mean of you']
@@ -220,7 +219,7 @@ class FunCommands(commands.Cog):
     async def nothing(self, ctx):
         return
 
-    @commands.command(help='The specified user is dumb asf')
+    @commands.command(aliases=['dumbfucker'], help='The specified user is dumb asf')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def dumb_fucker(self, ctx, bad_person: discord.Member):

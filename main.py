@@ -6,6 +6,7 @@ import os
 from discord.ext import commands
 import logging
 import json
+from other import CommonBotFunctions
 
 
 # Variable declarations
@@ -15,26 +16,12 @@ intents.members = True
 logging.basicConfig(level=logging.INFO)
 
 
-# Prefixes
+# Prefix
 def get_prefix(bot, message):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
     return commands.when_mentioned_or(prefixes[str(message.guild.id)])(bot, message)
-
-
-def is_banned(ctx):
-    with open('jsons/banned.json', 'r') as file:
-        banned_users = json.load(file)
-
-    return str(ctx.author.id) in banned_users
-
-
-def channel_banned(ctx):
-    with open('jsons/bannedChannels.json', 'r') as file:
-        banned_channels = json.load(file)
-
-    return str(ctx.channel.id) in banned_channels
 
 
 client = commands.Bot(command_prefix=get_prefix, intents=intents)
@@ -90,37 +77,37 @@ async def unload(ctx, extension):
 
 @client.command(hidden='true', help='Makes bot unusable')
 async def deactivate(ctx):
-    if not is_banned(ctx) and not channel_banned(ctx):
-        if ctx.author.id == 406663932166668288:
-            goodbye_msg = discord.Embed(
-                description=f'Goodbye for now.',
-                color=discord.Color.dark_gray()
-            )
+    if ctx.author.id == 406663932166668288:
+        goodbye_msg = discord.Embed(
+            description=f'Goodbye for now.',
+            color=discord.Color.dark_gray()
+        )
 
-            for fn in os.listdir('./cogs'):
-                if fn.endswith('.py'):
-                    client.unload_extension(f'cogs.{fn[:-3]}')
+        for fn in os.listdir('./cogs'):
+            if fn.endswith('.py'):
+                client.unload_extension(f'cogs.{fn[:-3]}')
 
-            await ctx.send(embed=goodbye_msg)
-        else:
+        await ctx.send(embed=goodbye_msg)
+    else:
+        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'{ctx.author.mention} you may not use this command.')
 
 
 @client.command(hidden='true', help='Makes bot usable')
 async def activate(ctx):
-    if not is_banned(ctx) and not channel_banned(ctx):
-        if ctx.author.id == 406663932166668288:
-            imback_msg = discord.Embed(
-                description=f'I\'m back!',
-                color=discord.Color.dark_gray()
-            )
+    if ctx.author.id == 406663932166668288:
+        imback_msg = discord.Embed(
+            description=f'I\'m back!',
+            color=discord.Color.dark_gray()
+        )
 
-            for fn in os.listdir('./cogs'):
-                if fn.endswith('.py'):
-                    client.load_extension(f'cogs.{fn[:-3]}')
+        for fn in os.listdir('./cogs'):
+            if fn.endswith('.py'):
+                client.load_extension(f'cogs.{fn[:-3]}')
 
-            await ctx.send(embed=imback_msg)
-        else:
+        await ctx.send(embed=imback_msg)
+    else:
+        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
             await ctx.send(f'{ctx.author.mention} you may not use this command.')
 
 
