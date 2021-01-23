@@ -1,8 +1,6 @@
 # Import statements
-import discord
 import random
-from discord.ext import commands
-from other import CommonBotFunctions
+from other.CommonBotFunctions import *
 
 
 class FunCommands(commands.Cog):
@@ -17,7 +15,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def kill(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             self_kill_messages = ['decided to off themselves.', 'decided the donuts weren\'t good enough.',
                                   'wants to try making toast in a bath',
                                   'decides to become a ceiling fixture.']
@@ -32,7 +30,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def say(self, ctx, *, speechbubble):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if speechbubble.endswith('-hide'):
 
                 hiddenspeechbubble = speechbubble[:-5]
@@ -47,7 +45,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def cookie(self, ctx, cookiee: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if cookiee == ctx.author:
                 await ctx.send(f'{ctx.author.display_name} rewards themself with a cookie.')
             else:
@@ -57,7 +55,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def simp(self, ctx, simpee: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if simpee == ctx.author:
                 await ctx.send(f'{ctx.author.display_name} simps themself. Slightly narcissistic ngl.')
             else:
@@ -68,7 +66,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def superior(self, ctx, superioree: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             is_sup = ['is literally superior to', 'falsely believes they\'re superior to']
 
             await ctx.send(f'{ctx.author.display_name} {random.choice(is_sup)} {superioree.display_name}')
@@ -77,7 +75,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def quote(self, ctx):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             machiavelli_quotes = [
                 '“Everyone sees what you appear to be, few experience what you really are.”\n― Niccolò Machiavelli, '
                 'The Prince',
@@ -133,14 +131,14 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def no_balls(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{target.display_name} has no balls.')
 
     @commands.command(aliases=['hasballs'], help='Says that the specified user has balls')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def has_balls(self, ctx, target: discord.Member = 'none'):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if target == 'none':
                 await ctx.send(f'{ctx.author.display_name} has balls.')
             else:
@@ -150,13 +148,13 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def is_simp(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{target.display_name} is a simp.')
 
     @commands.command(help='Press F to pay respects (target optional)')
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def f(self, ctx, *, target=''):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             if target == '':
                 f_message = f'Press f to pay respects'
             else:
@@ -169,7 +167,7 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def choose(self, ctx, *, options):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             option_list = options.split()
             pick = random.choice(option_list)
             await ctx.send(f'{pick} wins.')
@@ -178,14 +176,14 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def bruh(self, ctx):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'bruh')
 
     @commands.command(aliases=['secretsanta', 'ss'], help='Sends out dms with secret santa targets')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def secret_santa(self, ctx, *people: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             people_list = list(people)
             random.shuffle(people_list)
             number = len(people_list)
@@ -201,14 +199,14 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def good_job(self, ctx):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'Awww, thank you {ctx.author.display_name}')
 
     @commands.command(aliases=['badjob!', 'badjob'], help='Tell the bot \'bad job\'')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def bad_job(self, ctx):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             random.seed()
             neg_msg = ['Well fuck you', 'I\'m trying my best', 'Fuck offff', 'That\'s rather mean of you']
             await ctx.send(f'{random.choice(neg_msg)} {ctx.author.display_name}')
@@ -223,14 +221,14 @@ class FunCommands(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def dumb_fucker(self, ctx, bad_person: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{bad_person.display_name} is one dumb motherfucker.')
 
     @commands.command(help='Oh my G.')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def omyg(self, ctx):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.message.delete()
             messages = await ctx.channel.history(limit=1).flatten()
             message = messages[0]

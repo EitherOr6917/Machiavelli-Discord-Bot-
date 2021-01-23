@@ -2,7 +2,6 @@
 from discord.ext import tasks
 import random
 import discord.utils
-from other import CommonBotFunctions
 from other.CommonBotFunctions import *
 
 # Variables
@@ -258,7 +257,7 @@ class Functional(commands.Cog):
     @commands.command(help='Unbans a user from talking on servers the bot is in')
     async def not_dumb(self, ctx, target: discord.User):
         if not is_banned(ctx) and not channel_banned(ctx):
-            if CommonBotFunctions.is_owner(ctx):  # Checking if I was the one to initiate the command
+            if is_owner(ctx):  # Checking if I was the one to initiate the command
                 with open('jsons/dumbPeople.json', 'r') as file:
                     dumb_people = json.load(file)
 
