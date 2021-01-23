@@ -1,5 +1,15 @@
 import json
 import discord
+from discord.ext import commands
+
+
+def is_superuser_or_admin(member: discord.Member):
+    user = User(member)
+    return user.level == 100 or member.guild_permissions.administrator
+
+
+def is_owner(ctx: commands.Context):
+    return ctx.author.id == 406663932166668288
 
 
 def is_banned(ctx):
@@ -29,14 +39,14 @@ class User:
         self._id = str(member.id)
         self._level = data[self._id]['level'] if self._id in data else 0
         self._xp = data[self._id]['xp'] if self._id in data else 0
-        self._amount_to_level = 25 * (self._level+1) ^ 2
+        self._amount_to_level = 5 * (self._level+1) ** 2
 
     # Functions
     def try_level_up(self):
-        while self._xp > self._amount_to_level and self._level < 99:
+        while self._xp >= self._amount_to_level and self._level < 99:
             self._xp -= self._amount_to_level
             self._level += 1
-            self._amount_to_level = 25 * (self._level+1) ^ 2
+            self._amount_to_level = 5 * (self._level+1) ** 2
 
     def add(self, amount: int):
         self._xp += amount

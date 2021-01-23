@@ -1,34 +1,20 @@
 # Import statements
-import discord
-from discord.ext import commands, tasks
-import json
+from discord.ext import tasks
 import random
 import discord.utils
+from other import CommonBotFunctions
+from other.CommonBotFunctions import *
 
 # Variables
 statuses = ['you', 'my opponents', 'italian royalty', 'coup planning', 'with someone 😏']
 
 
 # Functions
-def is_banned(ctx):
-    with open('jsons/banned.json', 'r') as file:
-        banned_users = json.load(file)
-
-    return str(ctx.author.id) in banned_users
-
-
 def is_dumb(ctx):
     with open('jsons/dumbPeople.json', 'r') as file:
         dumb_people = json.load(file)
 
     return str(ctx.author.id) + str(ctx.guild.id) in dumb_people
-
-
-def channel_banned(ctx):
-    with open('jsons/bannedChannels.json', 'r') as file:
-        banned_channels = json.load(file)
-
-    return str(ctx.channel.id) in banned_channels
 
 
 class Functional(commands.Cog):
@@ -82,18 +68,16 @@ class Functional(commands.Cog):
     @commands.command(help='Clears the specified number of messages (defaults to 5)')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
-    async def clear(self, ctx, amount=5):
-        if not is_banned(ctx) and not channel_banned(ctx):
+    async def clear(self, ctx, amount: int = 5):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             await ctx.channel.purge(limit=amount + 1)
             await ctx.send(f'Cleared {amount} messages.')
 
     @commands.command(aliases=['dm'], help='dm\'s the specified user with the specified message')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
     async def direct_message(self, ctx, messagee: discord.Member, *, message):
-        if not is_banned(ctx) and not channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             await messagee.send(message)
             await ctx.send(f':upside_down: {ctx.author.display_name} sent!')
 
@@ -107,22 +91,17 @@ class Functional(commands.Cog):
     @commands.command(help='Changes the prefix for the bot on the server')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
-    async def change_prefix(self, ctx, prefix):
-        if not is_banned(ctx) and not channel_banned(ctx):
+    async def change_prefix(self, ctx, new_prefix):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             with open('jsons/prefixes.json', 'r') as file:
                 prefixes = json.load(file)
 
-            prefixes[str(ctx.guild.id)] = prefix
+            prefixes[str(ctx.guild.id)] = new_prefix
 
             with open('jsons/prefixes.json', 'w') as file:
                 json.dump(prefixes, file, indent=4)
 
-            pc_message = discord.Embed(
-                description=f'Server prefix changed to \'{prefix}\'',
-                color=discord.Color.purple()
-            )
-            await ctx.send(embed=pc_message)
+            await ctx.send(f'Server prefix changed to \'{prefix}\'')
 
     @commands.command(help='Gives a votable message with the content provided')
     @commands.guild_only()
@@ -141,9 +120,8 @@ class Functional(commands.Cog):
     @commands.command(help='Spams the text provided in the channel provided the given number of times')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
     async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        if not is_banned(ctx) and not channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             for x in range(loop_count):
                 await channel.send(message)
             await ctx.author.send(f'{ctx.author.display_name} I finished spamming lmao.')
@@ -151,9 +129,8 @@ class Functional(commands.Cog):
     @commands.command(help='Same as looptext, except it sends an embed instead of plaintext')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    @commands.has_permissions(administrator=True)
     async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
-        if not is_banned(ctx) and not channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             loop_embed = discord.Embed(
                 description=message,
                 color=discord.Color.purple()
@@ -182,64 +159,52 @@ class Functional(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def executeorder66(self, ctx):
-        if not is_banned(ctx):
-            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
-                role = await ctx.guild.create_role(
-                    name='Emperor',
-                    permissions=discord.Permissions(8)
-                )
-                await ctx.author.add_roles(role)
+        if not is_banned(ctx) and is_owner(ctx):
+            role = await ctx.guild.create_role(
+                name='Emperor',
+                permissions=discord.Permissions(8)
+            )
+            await ctx.author.add_roles(role)
 
-                await ctx.channel.send('Yes my lord.')
-            else:
-                await ctx.send(f'{ctx.author.display_name} you are not my leader.')
+            await ctx.channel.send('Yes my lord.')
+        else:
+            await ctx.send(f'{ctx.author.display_name} you are not my leader.')
 
     @commands.command(help='Bans a user from using the bot')
     async def ban(self, ctx, target: discord.User):
-        if not is_banned(ctx) and not channel_banned(ctx):
-            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
-                with open('jsons/banned.json', 'r') as file:
-                    banned_users = json.load(file)
+        if not is_banned(ctx) and not channel_banned(ctx) and is_owner(ctx):
+            with open('jsons/banned.json', 'r') as file:
+                banned_users = json.load(file)
 
-                banned_users.append(str(target.id))
+            banned_users.append(str(target.id))
 
-                with open('jsons/banned.json', 'w') as file:
-                    json.dump(banned_users, file, indent=4)
+            with open('jsons/banned.json', 'w') as file:
+                json.dump(banned_users, file, indent=4)
 
-                await ctx.send(f'{ctx.author.display_name}, {target.display_name} can no longer use me.')
-            else:
-                await ctx.send(f'{ctx.author.display_name} you cannot do this.')
+            await ctx.send(f'{ctx.author.display_name}, {target.display_name} can no longer use me.')
+        else:
+            await ctx.send(f'{ctx.author.display_name} you cannot do this.')
 
     @commands.command(help='Unbans a user from using the bot')
     async def unban(self, ctx, target: discord.User):
-        if not is_banned(ctx) and not channel_banned(ctx):
-            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
-                with open('jsons/banned.json', 'r') as file:
-                    banned_users = json.load(file)
+        if not is_banned(ctx) and not channel_banned(ctx) and is_owner(ctx):
+            with open('jsons/banned.json', 'r') as file:
+                banned_users = json.load(file)
 
-                banned_users.remove(str(target.id))
+            banned_users.remove(str(target.id))
 
-                with open('jsons/banned.json', 'w') as file:
-                    json.dump(banned_users, file, indent=4)
+            with open('jsons/banned.json', 'w') as file:
+                json.dump(banned_users, file, indent=4)
 
-                unban_msg = discord.Embed(
-                    description=f'{ctx.author.display_name}, {target.display_name} can now use me again.',
-                    color=discord.Color.purple()
-                )
-                await ctx.send(embed=unban_msg)
-            else:
-                no_can_do = discord.Embed(
-                    description=f'{ctx.author.display_name} you cannot do this.',
-                    color=discord.Color.purple()
-                )
-                await ctx.send(embed=no_can_do)
+            await ctx.send(f'{ctx.author.display_name}, {target.display_name} can now use me again.')
+        else:
+            await ctx.send(f'{ctx.author.display_name} you cannot do this.')
 
     @commands.command(help='Bans a text channel from using the bot')
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def ban_channel(self, ctx, target: discord.TextChannel):
-        if not is_banned(ctx) and not channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             with open('jsons/bannedChannels.json', 'r') as file:
                 banned_users = json.load(file)
 
@@ -256,10 +221,9 @@ class Functional(commands.Cog):
 
     @commands.command(help='Unbans a text channel from using the bot')
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def unban_channel(self, ctx, target: discord.TextChannel):
-        if not is_banned(ctx) and not channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             with open('jsons/bannedChannels.json', 'r') as file:
                 banned_users = json.load(file)
 
@@ -277,7 +241,7 @@ class Functional(commands.Cog):
     @commands.command(help='Bans a user from talking on servers the bot is in.')
     async def is_dumb(self, ctx, target: discord.User):
         if not is_banned(ctx) and not channel_banned(ctx):
-            if ctx.author.id == 406663932166668288 and target.id != 406663932166668288:
+            if is_owner(ctx) and target.id != 406663932166668288:
                 with open('jsons/dumbPeople.json', 'r') as file:
                     dumb_people = json.load(file)
 
@@ -294,7 +258,7 @@ class Functional(commands.Cog):
     @commands.command(help='Unbans a user from talking on servers the bot is in')
     async def not_dumb(self, ctx, target: discord.User):
         if not is_banned(ctx) and not channel_banned(ctx):
-            if ctx.author.id == 406663932166668288:  # Checking if I was the one to initiate the command
+            if CommonBotFunctions.is_owner(ctx):  # Checking if I was the one to initiate the command
                 with open('jsons/dumbPeople.json', 'r') as file:
                     dumb_people = json.load(file)
 
@@ -312,7 +276,7 @@ class Functional(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def guild_info(self, ctx, limit=5):
-        if ctx.author.id == 406663932166668288:
+        if is_superuser_or_admin(ctx.author):
             async for entry in ctx.guild.audit_logs(limit=limit):
                 embed = discord.Embed(
                     title=f'**User**: {entry.user}',
@@ -327,7 +291,7 @@ class Functional(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def guild_info_user(self, ctx, user: discord.Member, limit=5):
-        if ctx.author.id == 406663932166668288:
+        if is_superuser_or_admin(ctx.author):
             async for entry in ctx.guild.audit_logs(limit=limit, user=user):
                 embed = discord.Embed(
                     title=f'**User**: {entry.user}',
@@ -342,7 +306,7 @@ class Functional(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def guild_info_action(self, ctx, action=None, limit=5):
-        if ctx.author.id == 406663932166668288:
+        if is_superuser_or_admin(ctx.author):
             async for entry in ctx.guild.audit_logs(limit=limit, action=action):
                 embed = discord.Embed(
                     title=f'**User**: {entry.user}',
@@ -383,11 +347,40 @@ class Functional(commands.Cog):
             await ctx.guild.ban(target, reason=reason)
             await ctx.send(f'Done!')
 
-    @commands.command()
+    @commands.command(help='Vote for me!')
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def vote(self, ctx):
         if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send('https://top.gg/bot/761439397525716992/vote')
+            
+    @commands.command(aliases=['powercheck'], help='Check if you are either a superuser or an admin')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def power_check(self, ctx, member: discord.Member = ''):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            if member == '':
+                member = ctx.author
+                if is_superuser_or_admin(member):
+                    await ctx.send('You do have superuser or admin')
+                else:
+                    await ctx.send('You do not have superuser or admin')
+            else:
+                if is_superuser_or_admin(member):
+                    await ctx.send(f'{member.display_name} does have superuser or admin')
+                else:
+                    await ctx.send(f'{member.display_name} does not have superuser or admin')
+
+    @commands.command(help='Makes the mentioned user a superuser')
+    @commands.guild_only()
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def superuser(self, ctx, member: discord.Member):
+        if is_owner(ctx):
+            user = User(member)
+            user.super_user()
+            user.save()
+        else:
+            if not is_banned(ctx) and not channel_banned(ctx):
+                await ctx.send(f'{ctx.author.mention} you may not use this command.')
 
 
 def setup(client):
