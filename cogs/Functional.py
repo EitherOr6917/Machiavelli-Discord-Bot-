@@ -37,6 +37,7 @@ class Functional(commands.Cog):
         if not is_banned(message) and not channel_banned(message):
             if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
                 await message.channel.send(f'Hello {message.author.display_name}!')
+
             return
 
     @commands.Cog.listener()
@@ -52,9 +53,12 @@ class Functional(commands.Cog):
                                f'use >help '
                                f'\'command\'.')
             if isinstance(error, commands.CommandNotFound):
-                await ctx.send(f'{ctx.author.display_name} that command does not exist.')
+                await ctx.send(f'**{ctx.author.display_name}**, that command does not exist.')
             if isinstance(error, commands.MissingPermissions):
-                await ctx.send(f'{ctx.author.display_name} you do not have the required permissions for that command.')
+                await ctx.send(f'**{ctx.author.display_name}**, you do not have the required permissions for that '
+                               f'command.')
+            if isinstance(error, commands.CommandOnCooldown):
+                await ctx.send(f'**{ctx.author.display_name}**, this command is on cooldown for you!')
 
     # Commands
     @commands.command(help='Returns the bot\'s ping')
@@ -116,19 +120,20 @@ class Functional(commands.Cog):
             await message.add_reaction('❎')
             await message.add_reaction('✅')
 
-    @commands.command(help='Spams the text provided in the channel provided the given number of times')
+    @commands.command(help='Spams the text provided in the channel provided the given number of times',
+                      aliases=['looptext'])
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def looptext(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
+    async def loop_text(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             for x in range(loop_count):
                 await channel.send(message)
             await ctx.author.send(f'{ctx.author.display_name} I finished spamming lmao.')
 
-    @commands.command(help='Same as looptext, except it sends an embed instead of plaintext')
+    @commands.command(help='Same as looptext, except it sends an embed instead of plaintext', aliases=['loopembed'])
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def loopembed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
+    async def loop_embed(self, ctx, channel: discord.TextChannel, loop_count: int, *, message):
         if not is_banned(ctx) and not channel_banned(ctx) and is_superuser_or_admin(ctx.author):
             loop_embed = discord.Embed(
                 description=message,
@@ -138,10 +143,10 @@ class Functional(commands.Cog):
                 await channel.send(embed=loop_embed)
             await ctx.author.send(f'{ctx.author.display_name} I finished spamming lmao.')
 
-    @commands.command(help='Returns the discord ID of the targeted user')
+    @commands.command(help='Returns the discord ID of the targeted user', aliases=['checkid'])
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
-    async def checkid(self, ctx, target: discord.Member):
+    async def check_id(self, ctx, target: discord.Member):
         if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{target.display_name}\'s discord id is {target.id}')
 
@@ -153,6 +158,16 @@ class Functional(commands.Cog):
             await ctx.author.send('Here is the link to invite Machiavelli to your server: '
                                   'https://discord.com/api/oauth2/authorize?client_id=761439397525716992&permissions=8'
                                   '&redirect_uri=https%3A%2F%2Fdiscord.com%2Fapi%2Foauth2%2Fauthorize&scope=bot ')
+
+    @commands.command(help='Prints list of servers I\'m in.')
+    @commands.guild_only()
+    @commands.cooldown(1, 1, commands.BucketType.user)
+    async def servers(self, ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            string = ''
+            for item in self.client.guilds:
+                string += '[' + item.name + '-' + str(item.id) + ']' + '\n'
+            await ctx.send(string)
 
     @commands.command(hidden=True, help='Gives bot owner admin on specified server.')
     @commands.guild_only()
@@ -369,10 +384,10 @@ class Functional(commands.Cog):
                 else:
                     await ctx.send(f'{member.display_name} does not have superuser or admin')
 
-    @commands.command(help='Makes the mentioned user a superuser')
+    @commands.command(help='Makes the mentioned user a superuser', aliases=['superuser'])
     @commands.guild_only()
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def superuser(self, ctx, member: discord.Member):
+    async def super_user(self, ctx, member: discord.Member):
         if is_owner(ctx):
             user = User(member)
             user.super_user()

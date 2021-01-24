@@ -52,6 +52,9 @@ class User:
         self._xp += amount
         self.try_level_up()
 
+    def remove(self, amount: int):
+        self._xp -= amount
+
     def super_user(self):
         self._level = 100
 
