@@ -141,8 +141,9 @@ class Virtu(commands.Cog):
                         await ctx.send(f'{ctx.author.display_name} please send an integer between 1 and 100.')
                     else:
                         if current_try == correct_num:
-                            await ctx.send(f'Congrats {ctx.author.display_name}, you guessed the right number!')
-                            user.add(5 * guesses)
+                            await ctx.send(f'Congrats {ctx.author.display_name}, you guessed the right number after '
+                                           f'{10 - guesses}! For this you win {10 * guesses} virtù.')
+                            user.add(10 * guesses)
                             user.save()
                             break
                         elif current_try > correct_num + 25:
@@ -169,7 +170,8 @@ class Virtu(commands.Cog):
                         await ctx.send(f'{ctx.author.display_name} please send an integer between 1 and 100.')
                     else:
                         if current_try == correct_num:
-                            await ctx.send(f'Congrats {ctx.author.display_name}, you guessed the right number!')
+                            await ctx.send(f'Congrats {ctx.author.display_name}, you guessed the right number after '
+                                           f'{10 - guesses}! For this you win {10 * guesses} virtù.')
                             user.add(10 * guesses)
                             user.save()
                         else:
