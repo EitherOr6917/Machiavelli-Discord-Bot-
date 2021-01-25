@@ -54,7 +54,7 @@ class Sus(commands.Cog):
                 )
                 await ctx.send(embed=msg)
 
-    @commands.command(help='Choke the shit out of', hidden=True, aliases=['choek'])
+    @commands.command(help='Choke the shit out of', hidden=True)
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def choektheshitouta(self, ctx, target: discord.Member):
