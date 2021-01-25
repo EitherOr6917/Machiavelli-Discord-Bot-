@@ -235,6 +235,16 @@ class FunCommands(commands.Cog):
             await message.add_reaction('🇬')
             await ctx.send(f'Oh my G')
 
+    @commands.command(help='Cards against humanity', aliases=['cardsagainsthumanity', 'cah'])
+    @commands.guild_only()
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def cards_against_humanity(self, ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
+            with open('jsons/cahcards.json', 'r') as file:
+                cards = json.load(file)
+                white_cards = cards['white']
+                black_cards = cards['black']
+
 
 def setup(client):
     client.add_cog(FunCommands(client))
