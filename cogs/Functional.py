@@ -8,14 +8,6 @@ from other.CommonBotFunctions import *
 statuses = ['you', 'my opponents', 'italian royalty', 'coup planning', 'with someone 😏']
 
 
-# Functions
-def is_dumb(ctx):
-    with open('jsons/dumbPeople.json', 'r') as file:
-        dumb_people = json.load(file)
-
-    return str(ctx.author.id) + str(ctx.guild.id) in dumb_people
-
-
 class Functional(commands.Cog):
 
     def __init__(self, client):
@@ -30,8 +22,10 @@ class Functional(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
+        with open('jsons/dumbPeople.json', 'r') as file:
+            dumb_people = json.load(file)
 
-        if is_dumb(message):
+        if str(message.author.id) + str(message.guild.id) in dumb_people:
             await message.delete()
 
         if not is_banned(message) and not channel_banned(message):

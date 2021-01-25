@@ -23,7 +23,6 @@ def get_prefix(bot, message):
         prefixes = json.load(file)
 
     if client.user.id == 803168372669022262:
-        print('true')
         return '<'
     else:
         try:
