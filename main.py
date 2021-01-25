@@ -10,7 +10,8 @@ from other import CommonBotFunctions
 
 
 # Variable declarations
-token = os.environ.get('DISCORD_TOKEN')
+with open('token.txt', 'r') as token_file:
+    token = token_file.read()
 intents = discord.Intents.default()
 intents.members = True
 logging.basicConfig(level=logging.INFO)
