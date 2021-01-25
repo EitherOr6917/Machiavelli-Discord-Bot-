@@ -22,16 +22,19 @@ class Functional(commands.Cog):
     @commands.Cog.listener('on_message')
     async def on_message(self, message):
         # do some extra stuff here
-        with open('jsons/dumbPeople.json', 'r') as file:
-            dumb_people = json.load(file)
+        if message.author is not self.client.user:
+            with open('jsons/dumbPeople.json', 'r') as file:
+                dumb_people = json.load(file)
 
-        if str(message.author.id) + str(message.guild.id) in dumb_people:
-            await message.delete()
+            if str(message.author.id) + str(message.guild.id) in dumb_people:
+                await message.delete()
 
-        if not is_banned(message) and not channel_banned(message):
-            if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
-                await message.channel.send(f'Hello {message.author.display_name}!')
+            if not is_banned(message) and not channel_banned(message):
+                if message.content.lower() == 'hello' or message.content.lower() == 'こんにちは':
+                    await message.channel.send(f'Hello {message.author.display_name}!')
 
+                return
+        else:
             return
 
     @commands.Cog.listener()
