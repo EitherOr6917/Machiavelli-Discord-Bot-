@@ -23,7 +23,8 @@ def get_prefix(bot, message):
         prefixes = json.load(file)
 
     if client.user.id == 803168372669022262:
-        return commands.when_mentioned_or('<')(bot, message)
+        print('true')
+        return '<'
     else:
         try:
             return commands.when_mentioned_or(prefixes[str(message.guild.id)])(bot, message)
