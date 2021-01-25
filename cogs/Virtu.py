@@ -52,7 +52,10 @@ class Virtu(commands.Cog):
         if not is_banned(ctx) and not channel_banned(ctx):
             target = ctx.author if member == '' else member
             user = User(target)
-            await ctx.send(f'{target.display_name} needs {user.amount_to_level} xp to level up!')
+            if user.amount_to_level > -1:
+                await ctx.send(f'{target.display_name} needs {user.amount_to_level} xp to level up!')
+            else:
+                await ctx.send(f'{target.display_name} cannot level up any further.')
 
     @commands.command(help='Become a gambler! Use the slot machine', aliases=['slotmachine', 'slots'])
     @commands.cooldown(1, 1, commands.BucketType.user)
@@ -65,7 +68,7 @@ class Virtu(commands.Cog):
                 await ctx.send(f'{ctx.author.display_name}, you do not have enough xp to do this.')
                 return
 
-            emojis = [':sunny:', ':partly_sunny:', ':cloud:', ':cloud_rain:', ':cloud_lightning:', ':cloud_snow:']
+            emojis = [':sunny:', ':partly_sunny:', ':cloud:', ':cloud_rain:', ':cloud_lightning:', ':snowflake:']
             results = [random.choice(emojis), random.choice(emojis), random.choice(emojis)]
             total = 1
             text = 'You lost your bet, try again!'

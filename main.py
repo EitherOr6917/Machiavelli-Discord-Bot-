@@ -21,7 +21,10 @@ def get_prefix(bot, message):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
-    return commands.when_mentioned_or(prefixes[str(message.guild.id)])(bot, message)
+    try:
+        return commands.when_mentioned_or(prefixes[str(message.guild.id)])(bot, message)
+    except KeyError:
+        return commands.when_mentioned_or('>')(bot, message)
 
 
 client = commands.Bot(command_prefix=get_prefix, intents=intents)

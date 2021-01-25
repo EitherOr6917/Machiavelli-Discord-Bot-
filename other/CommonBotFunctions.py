@@ -87,4 +87,4 @@ class User:
 
     @property
     def amount_to_level(self):
-        return self._amount_to_level
+        return self._amount_to_level if self._level < 99 else -1
