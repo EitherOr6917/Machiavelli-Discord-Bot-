@@ -1,8 +1,6 @@
 # Import statements
-import discord
-from discord.ext import commands
 import random
-from other import CommonBotFunctions
+from other.CommonBotFunctions import *
 
 
 class Sus(commands.Cog):
@@ -17,7 +15,7 @@ class Sus(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def likes(self, ctx, target1: discord.Member, target2: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{target1.display_name} and {target2.display_name} sitting in the tree\nK-i-s-s-i-n-g! '
                            f'\nFirst comes love.\nThen comes marriage.\nThen comes a baby in the baby carriage.')
 
@@ -25,21 +23,21 @@ class Sus(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def smash(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{ctx.author.display_name} wants to smash {target.display_name}')
 
     @commands.command(help='Specifies who is sus')
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def sus(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             await ctx.send(f'{ctx.author.display_name} thinks {target.display_name} is sus 😏')
 
     @commands.command(help='Says who is in the cult', hidden=True)
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def cummiecult(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             result = random.randint(1, 10)
             if result != 1:
                 msg = discord.Embed(
@@ -58,7 +56,7 @@ class Sus(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def choektheshitouta(self, ctx, target: discord.Member):
-        if not CommonBotFunctions.is_banned(ctx) and not CommonBotFunctions.channel_banned(ctx):
+        if not is_banned(ctx) and not channel_banned(ctx):
             msg = discord.Embed(
                 description=f'{ctx.author.display_name} chokes the shit out of {target.display_name}',
                 color=discord.Color.purple()
