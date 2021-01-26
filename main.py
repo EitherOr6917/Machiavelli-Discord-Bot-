@@ -8,7 +8,6 @@ import logging
 import json
 from other import CommonBotFunctions
 
-
 # Variable declarations
 with open('token.txt', 'r') as token_file:
     token = token_file.read()
@@ -17,7 +16,7 @@ intents.members = True
 logging.basicConfig(level=logging.INFO)
 
 
-# Prefix
+# Prefix and Help Command
 def get_prefix(bot, message):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
@@ -31,7 +30,15 @@ def get_prefix(bot, message):
             return commands.when_mentioned_or('>')(bot, message)
 
 
-client = commands.Bot(command_prefix=get_prefix, intents=intents)
+class EmbeddedHelp(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            emby = discord.Embed(description=page, color=discord.Color.purple())
+            await destination.send(embed=emby)
+
+
+client = commands.Bot(command_prefix=get_prefix, intents=intents, help_command=EmbeddedHelp())
 
 
 # Events
