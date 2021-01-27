@@ -49,8 +49,6 @@ class Functional(commands.Cog):
                 await ctx.send(f'{ctx.author.display_name} please pass in correct arguments. For more information, '
                                f'use >help '
                                f'\'command\'.')
-            if isinstance(error, commands.CommandNotFound):
-                await ctx.send(f'**{ctx.author.display_name}**, that command does not exist.')
             if isinstance(error, commands.MissingPermissions):
                 await ctx.send(f'**{ctx.author.display_name}**, you do not have the required permissions for that '
                                f'command.')
