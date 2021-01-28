@@ -63,7 +63,7 @@ class CardsAgainstHumanity(commands.Cog):
                 except asyncio.TimeoutError:
                     await ctx.send(f'Sorry {ctx.author.display_name}, your command has timed out.')
                 else:
-                    if ('y' and 'n' not in msg.content.lower()) or ('y' and 'n' in msg.content.lower()):
+                    if 'y' not in msg.content.lower() and 'n' not in msg.content.lower():
                         await ctx.send('Please respond with \'yes\' or \'no\'.')
                     else:
                         if 'n' in msg.content.lower():
