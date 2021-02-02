@@ -27,7 +27,7 @@ class CardsAgainstHumanity(commands.Cog):
                 except asyncio.TimeoutError:
                     await ctx.send(f'Sorry {ctx.author.display_name}, your command has timed out.')
                 else:
-                    if ('n' not in msg.content.lower()) and ('y' not in msg.content.lower()):
+                    if 'n' not in msg.content.lower() and 'y' not in msg.content.lower():
                         await ctx.send('Please respond with \'y\' or \'n\'.')
                     else:
                         if 'n' in msg.content.lower():
@@ -70,13 +70,12 @@ class CardsAgainstHumanity(commands.Cog):
                             await ctx.send('Command canceled, please restart!')
                             return
                         elif 'y' in msg.content.lower():
-                            replied_correctly = True
+                            break
 
             # Ask whether or not to use text to speech
             cah_tts = False
             await ctx.send('Use /tts for messages (y/n)?')
-            replied_correctly = False
-            while not replied_correctly:
+            while True:
                 try:
                     msg = await self.client.wait_for(
                         'message',
@@ -85,16 +84,16 @@ class CardsAgainstHumanity(commands.Cog):
                 except asyncio.TimeoutError:
                     await ctx.send(f'Sorry {ctx.author.display_name}, your command has timed out.')
                 else:
-                    if ('y' and 'n' not in msg.content.lower()) or ('y' and 'n' in msg.content.lower()):
+                    if 'y' not in msg.content.lower() and 'n' not in msg.content.lower():
                         await ctx.send('Please respond with \'yes\' or \'no\'.')
                     else:
                         if 'n' in msg.content.lower():
                             await ctx.send('Text to speech off!')
                             break
                         elif 'y' in msg.content.lower():
-                            replied_correctly = True
-                            await ctx.send('Text to speech on!')
                             cah_tts = True
+                            await ctx.send('Text to speech on!', tts=cah_tts)
+                            break
 
             # Now for the actual game
             await ctx.send('At the end of each round, current points will be displayed and you may end the game.')
@@ -129,7 +128,6 @@ class CardsAgainstHumanity(commands.Cog):
                 round_card = cards['black'].pop()
                 await ctx.send(f'The Card Czar this round is {card_czar.display_name}, and the card is:\n'
                                f'**{round_card}**', tts=cah_tts)
-
 
     @commands.command(aliases=['cardsagainsthumanityrules', 'cahrules'], help='Cards Against Humanity Rules')
     @commands.guild_only()

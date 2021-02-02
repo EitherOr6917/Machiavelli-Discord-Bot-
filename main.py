@@ -21,7 +21,7 @@ def get_prefix(bot, message):
     with open('jsons/prefixes.json', 'r') as file:
         prefixes = json.load(file)
 
-    if client.user.name == 'BetaMachi' and client.user.discriminator == '1809':
+    if bot.user.id == 803168372669022262:
         return commands.when_mentioned_or('^')(bot, message)
     else:
         try:
