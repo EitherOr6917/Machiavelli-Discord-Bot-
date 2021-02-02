@@ -53,8 +53,7 @@ class CardsAgainstHumanity(commands.Cog):
 
             await ctx.send(check_message)
 
-            replied_correctly = False
-            while not replied_correctly:
+            while True:
                 try:
                     msg = await self.client.wait_for(
                         'message',
@@ -70,13 +69,13 @@ class CardsAgainstHumanity(commands.Cog):
                             await ctx.send('Command canceled, please restart!')
                             return
                         elif 'y' in msg.content.lower():
-                            replied_correctly = True
+                            break
 
             # Ask whether or not to use text to speech
             cah_tts = False
             await ctx.send('Use /tts for messages (y/n)?')
             replied_correctly = False
-            while not replied_correctly:
+            while True:
                 try:
                     msg = await self.client.wait_for(
                         'message',
@@ -92,9 +91,9 @@ class CardsAgainstHumanity(commands.Cog):
                             await ctx.send('Text to speech off!')
                             break
                         elif 'y' in msg.content.lower():
-                            replied_correctly = True
                             await ctx.send('Text to speech on!')
                             cah_tts = True
+                            break
 
             # Now for the actual game
             await ctx.send('At the end of each round, current points will be displayed and you may end the game.')
